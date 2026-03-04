@@ -3,6 +3,71 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cykj.mapper.UserMapper">
+    <insert id="insertUser">
+        insert into user (account,password,name,sex,age,phone,address,create_time)
+        values (#{userVO.account},#{userVO.password},#{userVO.name},#{userVO.sex},
+                #{userVO.age},#{userVO.phone},#{userVO.address},#{userVO.createTime})
+    </insert>
+    <update id="updateUser">
+        update user
+        <set>
+            <if test="userVO.password!=null">
+                password = #{userVO.password},
+            </if>
+            <if test="userVO.name!=null">
+                name = #{userVO.name},
+            </if>
+            <if test="userVO.sex!=null">
+                sex = #{userVO.sex},
+            </if>
+            <if test="userVO.age!=null">
+                age = #{userVO.age},
+            </if>
+            <if test="userVO.phone!=null">
+                phone = #{userVO.phone},
+            </if>
+            <if test="userVO.address!=null">
+                address = #{userVO.address},
+            </if>
+            <if test="userVO.money!=null">
+                money = #{userVO.money},
+            </if>
+            <if test="userVO.status!=null">
+                status = #{userVO.status},
+            </if>
+        </set>
+        where user_id = #{userVO.userId}
+    </update>
 
+    <delete id="deleteUser">
+        update user set is_delete = 1
+        where user_id = #{useId}
+    </delete>
+    <select id="selectAllUser" resultType="com.cykj.enity.vo.UserVO">
+        select * from user
+        <where>
+            is_delete = 0
+            <if test="userDO.account!=null and userDO.account != ''">
+               and account = #{userDO.account}
+            </if>
+            <if test="userDO.name!=null and userDO.name != ''">
+                and name like concat{'%',#{userDO.name},'%'}
+            </if>
+            <if test="userDO.phone!=null and userDO.phone!=''">
+                and phone = #{userDO.phone}
+            </if>
+            <if test="userDO.status!=null and userDO.status!=''">
+                and status = #{userDO.status}
+            </if>
+        </where>
+    </select>
+    <select id="selectAllUserById" resultType="com.cykj.enity.vo.UserVO">
+        select * from user
+        where user_id = #{useId}
+    </select>
+    <select id="login" resultType="com.cykj.enity.vo.UserVO">
+        select * from user
+        where account = #{userVO.account} and password = #{userVO.password}
+    </select>
 
 </mapper>

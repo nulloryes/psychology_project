@@ -8,14 +8,14 @@ import java.sql.Timestamp;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserVO {
+public class UserVO{
   private long userId;
   private String account;
   private String password;
   private String name;
   private String sex;
   private long age;
-  private long phone;
+  private String phone;
   private String address;
   private long status;
   private long isDelete;
