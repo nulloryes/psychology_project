@@ -1,0 +1,37 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+  <!--指定ioc容器配置文件的位置，与applicationContext.xml的包扫描一同使用-->
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml</param-value>
+  </context-param>
+  <!--    上下文监听器-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+
+  <!--  dispatcherServlet:前端控制器-->
+  <servlet>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+    <!--    加载mvc的配置文件-->
+    <init-param>
+      <!--      contextConfigLocation为固定写法-->
+      <param-name>contextConfigLocation</param-name>
+      <param-value>classpath:spring_mvc.xml</param-value>
+    </init-param>
+  </servlet>
+
+  <!--  请求映射，拦截所有的请求都映射到DispatcherServlet-->
+  <servlet-mapping>
+    <servlet-name>dispatcherServlet</servlet-name>
+    <!--    所有的请求-->
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>
+
+</web-app>
