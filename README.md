@@ -91,7 +91,7 @@ npm install
 npm run serve
 ```
 
-默认端口 **8080**。如需修改端口，编辑 `psychology-front/vue.config.js` 中的 `devServer.port`。
+默认端口 **8081**。如需修改端口，编辑 `psychology-front/vue.config.js` 中的 `devServer.port`。
 
 ### 5.4 启动管理端 admin-front
 
@@ -199,7 +199,7 @@ npm run serve
 
 ## 注意事项
 
-1. **端口不要冲突**：用户端 8080、管理端 8082、后端 8080（用户端已代理到后端 8080）。如果需要调整，修改各自的 `vue.config.js` 和后端端口配置即可。
+1. **端口不要冲突**：用户端 8081、管理端 8082、后端 8080（用户端已代理到后端 8080）。如果需要调整，修改各自的 `vue.config.js` 和后端端口配置即可。
 2. **Dify 必须先配置**：用户端启动时会请求 Dify 配置，如果后端 `ai_dify` 表中没有启用的记录，AI 聊天助手不会加载，但不影响页面其他功能。
 3. **敏感信息**：**不要提交** `.env.local`、API Key、数据库密码、任何 `.log` 文件。本仓库 `.gitignore` 已处理。
 4. **数据库字段**：`ai_dify.status` 的含义是 `0=未启用, 1=删除, 2=启用`，前端只加载 `status=2` 的那条记录。
