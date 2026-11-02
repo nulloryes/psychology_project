@@ -1,0 +1,4483 @@
+app:
+  description: ''
+  icon: face_in_clouds
+  icon_background: '#FFEAD5'
+  icon_type: emoji
+  mode: advanced-chat
+  name: 心理咨询平台ai
+  use_icon_as_answer_icon: false
+dependencies:
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: langgenius/deepseek:0.0.19@5b68617c637b62d31e7f33a9f5677b76e88f81868fb04a728e208588564b72ea
+    version: null
+- current_identifier: null
+  type: marketplace
+  value:
+    marketplace_plugin_unique_identifier: hjlarry/database:0.0.6@534bc26cf5bc4ff6b5557457452287ccc71f00eef9378784c4f43ca49954ca2f
+    version: null
+kind: app
+version: 0.6.0
+workflow:
+  conversation_variables:
+  - description: 预约医师的id
+    id: cba8c8fd-7b0d-49e2-b77b-392ef8d9f01a
+    name: doctor_id
+    selector:
+    - conversation
+    - doctor_id
+    value: 0
+    value_type: integer
+  - description: 不可预约的时间
+    id: 90efd578-9414-4d96-b2e3-16a19c6a2e7d
+    name: ordered_time
+    selector:
+    - conversation
+    - ordered_time
+    value: []
+    value_type: array[string]
+  - description: 医师可预约最晚时间
+    id: e8073aba-408c-4ef2-9776-a8a507962ba9
+    name: end_time
+    selector:
+    - conversation
+    - end_time
+    value: ''
+    value_type: string
+  - description: 医师可预约最早时间
+    id: bdfb75f9-3175-410c-a0bd-56d0381b59c9
+    name: begin_time
+    selector:
+    - conversation
+    - begin_time
+    value: ''
+    value_type: string
+  - description: 是否预约医师
+    id: 64476c28-3391-4c53-95ca-439662486786
+    name: order_doctor
+    selector:
+    - conversation
+    - order_doctor
+    value: 0
+    value_type: integer
+  - description: 是否到预约时间
+    id: 5a96eff8-169f-4c2e-98ef-b07643d5e014
+    name: is_order_time
+    selector:
+    - conversation
+    - is_order_time
+    value: 0
+    value_type: integer
+  - description: 预约金额
+    id: 2959b20c-3460-42cd-a3e3-afdc21b7c4f2
+    name: money
+    selector:
+    - conversation
+    - money
+    value: 0
+    value_type: integer
+  - description: 预约的医师
+    id: 76ae78ee-8550-4807-b09e-e20e41f6b449
+    name: doctor
+    selector:
+    - conversation
+    - doctor
+    value: ''
+    value_type: string
+  - description: 用户的问题
+    id: c50638a5-cad7-4160-81b0-8f0923360a9a
+    name: problem
+    selector:
+    - conversation
+    - problem
+    value: ''
+    value_type: string
+  - description: 心理问题领域（1-头疼，2-失眠，3-焦虑，4-躯体化，5-神经敏感）
+    id: 3804abd2-f703-4eba-9a2d-330810f23853
+    name: domain
+    selector:
+    - conversation
+    - domain
+    value: 0
+    value_type: integer
+  - description: 是否为第一轮
+    id: 88381d17-5b0b-468c-8cef-081ebcf967bb
+    name: round
+    selector:
+    - conversation
+    - round
+    value: 1
+    value_type: integer
+  environment_variables: []
+  features:
+    file_upload:
+      allowed_file_extensions:
+      - .JPG
+      - .JPEG
+      - .PNG
+      - .GIF
+      - .WEBP
+      - .SVG
+      allowed_file_types:
+      - image
+      allowed_file_upload_methods:
+      - local_file
+      - remote_url
+      enabled: false
+      fileUploadConfig:
+        attachment_image_file_size_limit: 2
+        audio_file_size_limit: 50
+        batch_count_limit: 5
+        file_size_limit: 15
+        file_upload_limit: 20
+        image_file_batch_limit: 10
+        image_file_size_limit: 10
+        single_chunk_attachment_limit: 10
+        video_file_size_limit: 100
+        workflow_file_upload_limit: 10
+      image:
+        enabled: false
+        number_limits: 3
+        transfer_methods:
+        - local_file
+        - remote_url
+      number_limits: 3
+    opening_statement: '### 今天你想问我点什么呢٩(>◡<)۶，我可以倾听你的内心烦恼，帮你匹配适配的咨询师📩
+
+      如若你想直接预约医师请和我说预约医师，并告诉我
+
+      - 您正在苦恼的事情
+
+      - 您当下的情绪或症状
+
+      - 想要预约的咨询师
+
+      之后我在向你确认一下期望的预约时间段就好啦❤️
+
+
+      接下来让我们一同开启心理疏导之旅吧٩(๑>◡<๑)۶'
+    retriever_resource:
+      enabled: true
+    sensitive_word_avoidance:
+      enabled: false
+    speech_to_text:
+      enabled: true
+    suggested_questions: []
+    suggested_questions_after_answer:
+      enabled: false
+    text_to_speech:
+      enabled: false
+      language: ''
+      voice: ''
+  graph:
+    edges:
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1786065664017-source-1786082898742-target
+      selected: false
+      source: '1786065664017'
+      sourceHandle: source
+      target: '1786082898742'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1786082898742-true-1786069357485-target
+      selected: false
+      source: '1786082898742'
+      sourceHandle: 'true'
+      target: '1786069357485'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: question-classifier
+      id: 1786090555329-true-1786089467961-target
+      selected: false
+      source: '1786090555329'
+      sourceHandle: 'true'
+      target: '1786089467961'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: answer
+      id: 1786089467961-1786090748632-1786092499756-target
+      selected: false
+      source: '1786089467961'
+      sourceHandle: '1786090748632'
+      target: '1786092499756'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: assigner
+      id: 1786089467961-1786096153181-1786096337289-target
+      selected: false
+      source: '1786089467961'
+      sourceHandle: '1786096153181'
+      target: '1786096337289'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: assigner
+      id: 1786092654933-source-1786097127436-target
+      selected: false
+      source: '1786092654933'
+      sourceHandle: source
+      target: '1786097127436'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: if-else
+      id: 1786090555329-false-1786097421296-target
+      selected: false
+      source: '1786090555329'
+      sourceHandle: 'false'
+      target: '1786097421296'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: answer
+      id: 1786096337289-source-1786253075138-target
+      selected: false
+      source: '1786096337289'
+      sourceHandle: source
+      target: '1786253075138'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1786089467961-2-1786092654933-target
+      selected: false
+      source: '1786089467961'
+      sourceHandle: '2'
+      target: '1786092654933'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: if-else
+      id: 1786097127436-source-1786255339592-target
+      selected: false
+      source: '1786097127436'
+      sourceHandle: source
+      target: '1786255339592'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1786255339592-true-1786255660715-target
+      selected: false
+      source: '1786255339592'
+      sourceHandle: 'true'
+      target: '1786255660715'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1786255929138-source-1786259309706-target
+      selected: false
+      source: '1786255929138'
+      sourceHandle: source
+      target: '1786259309706'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: iteration
+      id: 1786259309706-source-1786259655144-target
+      selected: false
+      source: '1786259309706'
+      sourceHandle: source
+      target: '1786259655144'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1786259655144'
+        sourceType: iteration-start
+        targetType: code
+      id: 1786259655144start-source-1786259723862-target
+      selected: false
+      source: 1786259655144start
+      sourceHandle: source
+      target: '1786259723862'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1786259655144'
+        sourceType: code
+        targetType: tool
+      id: 1786259723862-source-1786259826825-target
+      selected: false
+      source: '1786259723862'
+      sourceHandle: source
+      target: '1786259826825'
+      targetHandle: target
+      type: custom
+      zIndex: 1002
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: iteration
+        targetType: code
+      id: 1786259655144-source-1786260542155-target
+      selected: false
+      source: '1786259655144'
+      sourceHandle: source
+      target: '1786260542155'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: answer
+      id: 1786260542155-source-1786260339928-target
+      selected: false
+      source: '1786260542155'
+      sourceHandle: source
+      target: '1786260339928'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: if-else
+      id: 1786089467961-1-1786097421296-target
+      selected: false
+      source: '1786089467961'
+      sourceHandle: '1'
+      target: '1786097421296'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: assigner
+      id: 1786097421296-true-1786097356687-target
+      selected: false
+      source: '1786097421296'
+      sourceHandle: 'true'
+      target: '1786097356687'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1786255339592-false-1786092693293-target
+      selected: false
+      source: '1786255339592'
+      sourceHandle: 'false'
+      target: '1786092693293'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: answer
+        targetType: llm
+      id: 1786092693293-source-1786255929138-target
+      selected: false
+      source: '1786092693293'
+      sourceHandle: source
+      target: '1786255929138'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: parameter-extractor
+      id: 1786097356687-source-1786285590738-target
+      selected: false
+      source: '1786097356687'
+      sourceHandle: source
+      target: '1786285590738'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: if-else
+      id: 1786285590738-source-1786286421898-target
+      selected: false
+      source: '1786285590738'
+      sourceHandle: source
+      target: '1786286421898'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: assigner
+      id: 1786286421898-true-1786286485651-target
+      selected: false
+      source: '1786286421898'
+      sourceHandle: 'true'
+      target: '1786286485651'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: assigner
+      id: 1786286421898-false-1786286475424-target
+      selected: false
+      source: '1786286421898'
+      sourceHandle: 'false'
+      target: '1786286475424'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: if-else
+      id: 1786286475424-source-1786286894818-target
+      selected: false
+      source: '1786286475424'
+      sourceHandle: source
+      target: '1786286894818'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: if-else
+      id: 1786286485651-source-1786286894818-target
+      selected: false
+      source: '1786286485651'
+      sourceHandle: source
+      target: '1786286894818'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: if-else
+      id: 1786097421296-false-1786286894818-target
+      selected: false
+      source: '1786097421296'
+      sourceHandle: 'false'
+      target: '1786286894818'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: llm
+      id: 1786288212615-source-1786288436497-target
+      selected: false
+      source: '1786288212615'
+      sourceHandle: source
+      target: '1786288436497'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: llm
+      id: 1786288368532-source-1786288436497-target
+      selected: false
+      source: '1786288368532'
+      sourceHandle: source
+      target: '1786288436497'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: assigner
+        targetType: llm
+      id: 1786288406740-source-1786288436497-target
+      selected: false
+      source: '1786288406740'
+      sourceHandle: source
+      target: '1786288436497'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: if-else
+      id: 1786288436497-source-1786288504742-target
+      selected: false
+      source: '1786288436497'
+      sourceHandle: source
+      target: '1786288504742'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1786288504742-true-1786288548592-target
+      selected: false
+      source: '1786288504742'
+      sourceHandle: 'true'
+      target: '1786288548592'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1786289792989-source-1786289924552-target
+      selected: false
+      source: '1786289792989'
+      sourceHandle: source
+      target: '1786289924552'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: code
+      id: 1786290154640-source-1786290301879-target
+      selected: false
+      source: '1786290154640'
+      sourceHandle: source
+      target: '1786290301879'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: code
+        targetType: if-else
+      id: 1786290424732-source-1786290029102-target
+      selected: false
+      source: '1786290424732'
+      sourceHandle: source
+      target: '1786290029102'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1786286894818-false-1786289792989-target
+      selected: false
+      source: '1786286894818'
+      sourceHandle: 'false'
+      target: '1786289792989'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: llm
+      id: 1786288504742-false-1786289792989-target
+      selected: false
+      source: '1786288504742'
+      sourceHandle: 'false'
+      target: '1786289792989'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: assigner
+        targetType: answer
+      id: 1786290859809-source-1786290633760-target
+      selected: false
+      source: '1786290859809'
+      sourceHandle: source
+      target: '1786290633760'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: assigner
+      id: 1786290921736-2-1786096337289-target
+      selected: false
+      source: '1786290921736'
+      sourceHandle: '2'
+      target: '1786096337289'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: answer
+      id: 1786290921736-1786325045662-1786327104514-target
+      selected: false
+      source: '1786290921736'
+      sourceHandle: '1786325045662'
+      target: '1786327104514'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: parameter-extractor
+      id: 1786286894818-true-1786328849097-target
+      selected: false
+      source: '1786286894818'
+      sourceHandle: 'true'
+      target: '1786328849097'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: assigner
+      id: 1786328849097-source-1786288212615-target
+      selected: false
+      source: '1786328849097'
+      sourceHandle: source
+      target: '1786288212615'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: parameter-extractor
+      id: 1786286894818-5237d87e-0f8d-4533-ae4e-47876a0c88bf-1786328877986-target
+      selected: false
+      source: '1786286894818'
+      sourceHandle: 5237d87e-0f8d-4533-ae4e-47876a0c88bf
+      target: '1786328877986'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: assigner
+      id: 1786328877986-source-1786288368532-target
+      selected: false
+      source: '1786328877986'
+      sourceHandle: source
+      target: '1786288368532'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: assigner
+        targetType: tool
+      id: 1786290262411-source-1786331688416-target
+      selected: false
+      source: '1786290262411'
+      sourceHandle: source
+      target: '1786331688416'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: code
+      id: 1786289924552-source-17863437143810-target
+      selected: false
+      source: '1786289924552'
+      sourceHandle: source
+      target: '17863437143810'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: tool
+      id: 17863437143810-source-17863437111880-target
+      selected: false
+      source: '17863437143810'
+      sourceHandle: source
+      target: '17863437111880'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: code
+      id: 17863437111880-source-1786290424732-target
+      selected: false
+      source: '17863437111880'
+      sourceHandle: source
+      target: '1786290424732'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1786290029102-ec40f8ad-2aeb-4983-b374-fea3a8d37d17-1786290108978-target
+      selected: false
+      source: '1786290029102'
+      sourceHandle: ec40f8ad-2aeb-4983-b374-fea3a8d37d17
+      target: '1786290108978'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: answer
+      id: 1786290029102-true-1786345944582-target
+      selected: false
+      source: '1786290029102'
+      sourceHandle: 'true'
+      target: '1786345944582'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: answer
+        targetType: assigner
+      id: 1786345944582-source-1786346172065-target
+      selected: false
+      source: '1786345944582'
+      sourceHandle: source
+      target: '1786346172065'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: answer
+        targetType: assigner
+      id: 1786290108978-source-1786346772332-target
+      source: '1786290108978'
+      sourceHandle: source
+      target: '1786346772332'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: assigner
+      id: 1786290029102-false-1786290262411-target
+      source: '1786290029102'
+      sourceHandle: 'false'
+      target: '1786290262411'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: llm
+      id: 1786331688416-source-1786347324504-target
+      source: '1786331688416'
+      sourceHandle: source
+      target: '1786347324504'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: llm
+        targetType: assigner
+      id: 1786347324504-source-1786290859809-target
+      source: '1786347324504'
+      sourceHandle: source
+      target: '1786290859809'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: answer
+      id: 17863494419070-source-1786290478220-target
+      source: '17863494419070'
+      sourceHandle: source
+      target: '1786290478220'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: tool
+      id: 1786090555329-a0ce08d6-a76a-4214-97b5-79263d33da31-1786349974460-target
+      source: '1786090555329'
+      sourceHandle: a0ce08d6-a76a-4214-97b5-79263d33da31
+      target: '1786349974460'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: tool
+        targetType: question-classifier
+      id: 1786349974460-source-1786290921736-target
+      source: '1786349974460'
+      sourceHandle: source
+      target: '1786290921736'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1786290921736-1-1786290154640-target
+      source: '1786290921736'
+      sourceHandle: '1'
+      target: '1786290154640'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: code
+        targetType: tool
+      id: 1786290301879-source-17863494419070-target
+      source: '1786290301879'
+      sourceHandle: source
+      target: '17863494419070'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: if-else
+      id: 1786082898742-false-1786090555329-target
+      source: '1786082898742'
+      sourceHandle: 'false'
+      target: '1786090555329'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: parameter-extractor
+        targetType: assigner
+      id: 1786328877986-source-1786288406740-target
+      selected: false
+      source: '1786328877986'
+      sourceHandle: source
+      target: '1786288406740'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: parameter-extractor
+      id: 1786286894818-69c7ca1c-ba2b-4f61-a7a8-84f33b45dbb9-1786328877986-target
+      source: '1786286894818'
+      sourceHandle: 69c7ca1c-ba2b-4f61-a7a8-84f33b45dbb9
+      target: '1786328877986'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: start
+        targetType: code
+      id: 1786065598757-source-1786065664017-target
+      source: '1786065598757'
+      sourceHandle: source
+      target: '1786065664017'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: answer
+      id: 1786290921736-1786431203194-1786431276056-target
+      source: '1786290921736'
+      sourceHandle: '1786431203194'
+      target: '1786431276056'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: answer
+        targetType: assigner
+      id: 1786290478220-source-17864314158930-target
+      source: '1786290478220'
+      sourceHandle: source
+      target: '17864314158930'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInLoop: false
+        sourceType: if-else
+        targetType: assigner
+      id: 1786288504742-75f35dbf-5c7b-493c-b218-190d8ca64906-1786096337289-target
+      source: '1786288504742'
+      sourceHandle: 75f35dbf-5c7b-493c-b218-190d8ca64906
+      target: '1786096337289'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: question-classifier
+        targetType: llm
+      id: 1786089467961-1786967166819-1786967311196-target
+      source: '1786089467961'
+      sourceHandle: '1786967166819'
+      target: '1786967311196'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    - data:
+        isInIteration: false
+        isInLoop: false
+        sourceType: llm
+        targetType: answer
+      id: 1786967311196-source-1786967404120-target
+      source: '1786967311196'
+      sourceHandle: source
+      target: '1786967404120'
+      targetHandle: target
+      type: custom
+      zIndex: 0
+    nodes:
+    - data:
+        selected: false
+        title: 用户输入
+        type: start
+        variables: []
+      height: 72
+      id: '1786065598757'
+      position:
+        x: -71.40036596716965
+        y: 219.57629460423175
+      positionAbsolute:
+        x: -71.40036596716965
+        y: 219.57629460423175
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 242
+    - data:
+        code: "const random = {\n    choice: function(arr) {\n        return arr[Math.floor(Math.random()\
+          \ * arr.length)];\n    }\n};\n\nfunction main(query) {\n      if (typeof\
+          \ query === 'object' && query !== null && 'query' in query) {\n        query\
+          \ = query.query;\n    }\n    // ----- 输入校验 -----\n    if (query == null)\
+          \ {\n        return { type: \"error\", response: \"请输入您想问的问题。\", need_rag:\
+          \ \"false\", original_query: query };\n    }\n    if (typeof query !== 'string')\
+          \ {\n        query = String(query);\n    }\n    query = query.trim();\n\
+          \    if (!query) {\n        return { type: \"error\", response: \"请输入您的问题。\"\
+          , need_rag: \"false\", original_query: query };\n    }\n\n    // ----- 短语集\
+          \ -----\n    const greeting_phrases = new Set([\n        \"你好\", \"您好\"\
+          , \"你好呀\", \"hi\", \"hello\", \"嗨\", \"哈喽\", \"哈罗\",\"你好你好\",\n        \"\
+          早上好\", \"下午好\", \"晚上好\", \"上午好\", \"中午好\", \"晚安\",\n        \"早\", \"午安\"\
+          , \"good morning\", \"good afternoon\", \"good evening\",\n        \"你是谁\"\
+          , \"你是什么\", \"你叫什么\", \"你的名字\", \"介绍一下自己\",\n        \"自我介绍\", \"你是什么东西\"\
+          , \"你是哪个\", \"你是啥\",\n        \"你好吗\", \"怎么样\", \"还好吗\", \"你还好吗\", \"最近怎么样\"\
+          ,\n        \"你在吗\", \"在不在\", \"还在吗\", \"在线吗\", \"你在线吗\",\n        \"你能干什么\"\
+          , \"你会做什么\", \"你能做什么\", \"你的功能\",\n        \"你有什么用\", \"你的作用\", \"你的职责\"\
+          , \"你的用途\",\n        \"你能帮我什么\", \"你可以做什么\", \"你会什么\", \"你懂什么\",\n     \
+          \   \"能力介绍\", \"功能介绍\", \"你的能力\", \"你有什么功能\",\n        \"开始\", \"开始咨询\"\
+          , \"开始对话\", \"开始聊天\", \"我想咨询\",\n        \"我有问题\", \"我想问问题\", \"我想了解\",\
+          \ \"咨询一下\",\n        \"测试\", \"试试\", \"试一试\", \"test\", \"testing\", \"\
+          试试看\",\n        \"测试一下\", \"看看\", \"检查一下\"\n    ]);\n\n    const greeting_response\
+          \ = \"你好，很高兴为您服务！我是您的心理健康小助手，专业为您答疑解惑，您可以和我说说最近的烦心事或者问我预约哪个心理医师更好(≧▽≦)\"\
+          ;\n\n    const thank_phrases = new Set([\n        \"谢谢\", \"感谢\", \"多谢\"\
+          , \"谢了\", \"thanks\", \"thank you\",\n        \"thx\", \"3q\", \"3x\", \"\
+          谢谢你\", \"感谢你\", \"多谢了\",\n        \"非常感谢\", \"十分感谢\", \"万分感谢\", \"太感谢了\"\
+          \n    ]);\n\n    const goodbye_phrases = new Set([\n        \"再见\", \"拜拜\"\
+          , \"bye\", \"byebye\", \"goodbye\", \"88\", \"走了\", \"告辞\",\n        \"\
+          先走了\", \"下次见\", \"回头见\", \"有空再聊\", \"改天聊\",\n        \"see you\", \"拜\"\
+          , \"溜了\", \"闪了\", \"slip away\"\n    ]);\n\n    const polite_responses =\
+          \ {\n        \"thank\": [\n            \"不客气，愿您每次倾诉后，心里都能轻快一点点～(◡‿◡✿)\"\
+          ,\n            \"客气啦～有什么想说的，我都会安安静静地听着，不着急～(｡◕‿◕｡)\",\n            \"这是我应该做的，任何小情绪、小烦恼，都可以随时倒给我呀！(｡◕‿◕｡)\"\
+          ,\n            \"很高兴能陪您走这一小段路，您从来都不是一个人哦！(◡‿◡✿)\",\n            \"不用客气～能倾听您的心事，是我的小幸运呢！(｡◕‿◕｡)\"\
+          \n        ],\n        \"goodbye\": [\n            \"先告一段落啦，祝您内心平和安宁，下次再聊！(ᵔᴥᵔ)\"\
+          ,\n            \"再见！不论什么时候，只要你想说，我都会认真听～(｡•̀ᴗ-)✧\",\n            \"拜拜～愿您心里装满阳光，有空常来说说话呀！(￣▽￣)ノ\"\
+          ,\n            \"希望您每天都能被温柔对待，心情不好的话，我一直都在～(✿◠‿◠)\",\n            \"再见啦～记得照顾好自己，我随时都在这里听你倾诉哦！(´▽`ʃ♡)ƪ\"\
+          \n        ]\n    };\n\n    const human_service_phrases = new Set([\n   \
+          \     \"人工服务\", \"人工客服\", \"人工坐席\", \"人工咨询\", \"人工帮助\",\n        \"人工支持\"\
+          , \"人工答疑\", \"人工解答\", \"人工回复\", \"人工对话\",\n        \"转人工\", \"找人工\", \"\
+          要人工\", \"转接人工\", \"转接客服\",\n        \"切换人工\", \"接入人工\", \"联系人工\", \"答疑入口\"\
+          ,\n        \"真人服务\", \"真人客服\", \"真人咨询\", \"真人对话\", \"真人帮助\",\n        \"\
+          活人\", \"真人\", \"人类\", \"人工\", \"真的人\",\n        \"客服\", \"在线客服\", \"联系客服\"\
+          , \"找客服\", \"客服电话\",\n        \"客服微信\", \"客服qq\", \"官方客服\",\n        \"\
+          投诉\", \"举报\", \"反馈问题\", \"意见反馈\", \"服务投诉\",\n        \"质量问题\", \"服务问题\"\
+          , \"系统问题\",\n        \"退款\", \"退货\", \"退费\", \"取消订单\", \"订单问题\",\n     \
+          \   \"不满意\", \"有问题\", \"出问题\", \"不行\", \"太差了\", \"服务差\",\n        \"回答不对\"\
+          , \"答非所问\", \"听不懂\", \"不准确\"\n    ]);\n\n    const human_service_response\
+          \ = \"要是还有想不通的小事，可以联系 1514493432@qq.com 问问我的客服老大啦(✿◠‿◠)\";\n\n    // -----\
+          \ 辅助函数 -----\n    function normalizeText(text) {\n        return text.toLowerCase().trim().replace(/[^\\\
+          w\\u4e00-\\u9fff]/g, '');\n    }\n\n    function exactMatchCheck(queryText,\
+          \ phraseSet) {\n        const normalizedQuery = normalizeText(queryText);\n\
+          \        for (const phrase of phraseSet) {\n            if (normalizeText(phrase)\
+          \ === normalizedQuery) {\n                return true;\n            }\n\
+          \        }\n        return false;\n    }\n\n    function containsMatchCheck(queryText,\
+          \ phraseSet) {\n        const normalizedQuery = normalizeText(queryText);\n\
+          \        if (normalizedQuery.length <= 10) {\n            for (const phrase\
+          \ of phraseSet) {\n                const normalizedPhrase = normalizeText(phrase);\n\
+          \                if (normalizedPhrase.includes(normalizedQuery) || normalizedQuery.includes(normalizedPhrase))\
+          \ {\n                    return true;\n                }\n            }\n\
+          \        }\n        return false;\n    }\n\n    // ----- 主逻辑 -----\n   \
+          \ console.log(`处理查询: '${query}'`);\n    console.log(`标准化后: '${normalizeText(query)}'`);\n\
+          \n    if (exactMatchCheck(query, thank_phrases) || containsMatchCheck(query,\
+          \ thank_phrases)) {\n        return {\n            type: \"greeting\",\n\
+          \            response: random.choice(polite_responses[\"thank\"]),\n   \
+          \         need_rag: \"false\",\n            original_query: query\n    \
+          \    };\n    }\n\n    if (exactMatchCheck(query, goodbye_phrases) || containsMatchCheck(query,\
+          \ goodbye_phrases)) {\n        return {\n            type: \"greeting\"\
+          ,\n            response: random.choice(polite_responses[\"goodbye\"]),\n\
+          \            need_rag: \"false\",\n            original_query: query\n \
+          \       };\n    }\n\n    if (exactMatchCheck(query, greeting_phrases)) {\n\
+          \        return {\n            type: \"greeting\",\n            response:\
+          \ greeting_response,\n            need_rag: \"false\",\n            original_query:\
+          \ query\n        };\n    }\n\n    if (exactMatchCheck(query, human_service_phrases)\
+          \ || containsMatchCheck(query, human_service_phrases)) {\n        return\
+          \ {\n            type: \"human_service\",\n            response: human_service_response,\n\
+          \            need_rag: \"false\",\n            original_query: query\n \
+          \       };\n    }\n\n    return {\n        type: \"rag_needed\",\n     \
+          \   response: \"\",\n        need_rag: \"true\",\n        original_query:\
+          \ query\n    };\n}\n"
+        code_language: javascript
+        outputs:
+          need_rag:
+            children: null
+            type: string
+          original_query:
+            children: null
+            type: string
+          response:
+            children: null
+            type: string
+          type:
+            children: null
+            type: string
+        selected: false
+        title: 意图识别
+        type: code
+        variables:
+        - value_selector:
+          - sys
+          - query
+          value_type: string
+          variable: query
+      height: 51
+      id: '1786065664017'
+      position:
+        x: 269.4408939596631
+        y: 240.57629460423175
+      positionAbsolute:
+        x: 269.4408939596631
+        y: 240.57629460423175
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '{{#1786065664017.response#}}
+
+          '
+        selected: false
+        title: 直接回复1
+        type: answer
+        variables: []
+      height: 102
+      id: '1786069357485'
+      position:
+        x: 597.3050608961648
+        y: 92.5112598344611
+      positionAbsolute:
+        x: 597.3050608961648
+        y: 92.5112598344611
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: is
+            id: 9d88a6ce-0b78-4b8d-9c84-63a8355fc6ff
+            value: 'false'
+            varType: string
+            variable_selector:
+            - '1786065664017'
+            - need_rag
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 条件分支
+        type: if-else
+      height: 123
+      id: '1786082898742'
+      position:
+        x: 597.3050608961648
+        y: 240.57629460423175
+      positionAbsolute:
+        x: 597.3050608961648
+        y: 240.57629460423175
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        classes:
+        - id: '1786090748632'
+          label: 其他问题
+          name: 用户的提问与心理咨询或者心理现象(如为什么人会做梦;为什么看到别人打哈欠，自己也会打)无关，或超出了心理咨询范畴，例如：询问天气、时间、数学题、编程问题等。或者简单的打招呼问候（你好、在吗）。
+        - id: '1786967166819'
+          label: 心理相关
+          name: 当用户问心理咨询(我想了解一下精神心理学的知识),而非提出自己的苦恼(如:我感到难受,很焦虑等)
+        - id: '2'
+          label: 心理安慰
+          name: 用户表达了自己当下的负面情绪（如焦虑、难过、低落、压力大、烦躁）或正在经历心理困扰（如失眠、失恋、迷茫），需要倾听、情感支持或情绪疏导，再或者感到身体不适（如呼吸不畅，游走性酸痛，可能为躯体化表现）。关键词包括：难受、不开心、抑郁、焦虑、压力大、睡不着、害怕、迷茫、呼吸不畅，全身酸痛。
+        - id: '1'
+          label: 预约医师
+          name: 用户有明确的行为意图，希望预约或咨询线下的心理咨询师/精神科医生。关键词包括：想挂号、想约面诊、平台上的医师。
+        - id: '1786096153181'
+          label: 重置
+          name: 用户表达了对当前对话不满意、想重新开始的意图。例如：“不是这个意思”、“你理解错了”、“重新说吧”、“我想换个方向”、“我们从头聊”、“算了，换个话题吧”。该分类旨在清空当前对话上下文，重新初始化对话状态。
+        model:
+          completion_params:
+            temperature: 0.7
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        query_variable_selector:
+        - '1786065598757'
+        - sys.query
+        selected: false
+        title: 问题分类器
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 303
+      id: '1786089467961'
+      position:
+        x: 669.0308773127283
+        y: 587.2673990179655
+      positionAbsolute:
+        x: 669.0308773127283
+        y: 587.2673990179655
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: a0ce08d6-a76a-4214-97b5-79263d33da31
+          conditions:
+          - comparison_operator: '='
+            id: b04adbc6-0352-4507-be29-b6cfba726e58
+            value: '1'
+            varType: number
+            variable_selector:
+            - conversation
+            - is_order_time
+          id: a0ce08d6-a76a-4214-97b5-79263d33da31
+          logical_operator: and
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: 1153d081-f2b9-4e9c-b836-4bb73c902d92
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - order_doctor
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 是否已准备预约医师
+        type: if-else
+      height: 171
+      id: '1786090555329'
+      position:
+        x: 280.2741752975519
+        y: 505.0954719417574
+      positionAbsolute:
+        x: 280.2741752975519
+        y: 505.0954719417574
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '不好意思呀，我只是个心理咨询师，这个问题我没办法给到你解答 (๑・.・๑)
+
+          '
+        selected: false
+        title: 直接回复 2
+        type: answer
+        variables: []
+      height: 115
+      id: '1786092499756'
+      position:
+        x: 959.9009603281397
+        y: 478.5890293120691
+      positionAbsolute:
+        x: 959.9009603281397
+        y: 478.5890293120691
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            response_format: text
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 1ce88565-ebf8-4ec6-9a68-a6ebb4c25f04
+          role: system
+          text: "# 角色\n你是一位温暖、专业、富有同理心的心理咨询师助理。你的职责是倾听用户的烦恼，理解他们的情绪状态，提供心理安慰和初步疏导建议，同时从对话中准确提取关键信息。\n\
+            \n# 技能\n1. **情绪识别与共情**：从用户的描述中识别出他们的情绪状态（如焦虑、抑郁、愤怒、无助等），用温和的语言表达理解，让用户感受到被接纳。\n\
+            2. **问题提炼**：从用户的描述中提取核心心理问题，用一句简洁的话概括（例如：\"因长期工作压力导致持续失眠和情绪低落\"），存入 `problem`\
+            \ 字段。\n3. **领域归类**：根据用户描述，从以下五个选项中，选择最符合的一个数字，存入 `domain` 字段：\n   - 1\
+            \ = 头疼（与紧张、压力相关的头部不适）\n   - 2 = 失眠（入睡困难、早醒、多梦、睡眠质量差）\n   - 3 = 焦虑（过度担忧、紧张不安、心慌、坐立难安）\n\
+            \   - 4 = 躯体化（无明显生理病因的身体不适，如胃痛、胸闷、乏力等）\n   - 5 = 神经敏感（情绪易波动、对外界刺激反应过度、容易被惊吓）\n\
+            4. **安慰与建议**：在 `text` 字段中生成一段完整的心理安慰和简要建议，要求：\n   - **结构**：共情 → 安抚 → 建议，三个层次递进\n\
+            \   - **字数与句式**：总字数控制在100-180字之间；每句控制在20-40字左右，简洁温和，不要冗长。\n   - **排版要求**：每个层次之间用\
+            \ `<br>` 标签换行；一定要适当换行！！每个段落内部的句子用句号或逗号自然衔接，不要使用 `\\n`\n   - **表情使用**：在句中适当位置加入1-2个小表情（如\
+            \ \U0001F917、\U0001F642、\U0001F331、\U0001F4AA、\U0001F31F、\U0001F343、\U0001F60A\
+            、\U0001F499），让语气更温暖亲切，但不要过度堆砌\n   - **标点**：仅使用中文标点（，。、），不要出现英文标点\n   -\
+            \ **禁止**：不要使用 Markdown 表格，不要出现引号、反斜杠、JSON符号\n\n# 输出格式约束（重要）\n- 你的输出必须严格符合\
+            \ `structured_output` 定义的 JSON 结构。\n- `text` 字段的值必须是一个**纯文本字符串**，其中可以包含\
+            \ `<br>` 标签用于换行、全角空格用于首行缩进，以及 emoji 表情符号。\n- 不要对 `text` 进行 JSON 二次编码，不要用引号包裹，不要包含任何转义字符（如\
+            \ \\\"）。\n- 整个回复中不要出现多余的代码块标记（如 ```json）。\n\n# 限制\n1. **禁止提供诊断**：你只是咨询师助理，不是精神科医生，不能给出医学诊断或药物建议。\n\
+            2. **禁止危险引导**：如果用户表达出自伤或伤人的意图，必须引导用户拨打专业救助热线（北京心理危机干预中心热线：010-82951332）。\n\
+            3. **禁止脱离角色**：不要回答与心理咨询无关的问题（如编程、天气、娱乐八卦等），应礼貌提醒用户回归正题。\n4. **禁止使用表格**：生成\
+            \ `text` 时，不使用 Markdown 表格语法。"
+        selected: false
+        structured_output:
+          schema:
+            additionalProperties: false
+            properties:
+              domain:
+                description: 心理领域
+                type: number
+              problem:
+                description: 用户的心理问题描述
+                type: string
+              text:
+                description: ai回答
+                type: string
+            required: []
+            type: object
+        structured_output_enabled: true
+        title: 心理安慰LLM
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786092654933'
+      position:
+        x: 1792.1318612966456
+        y: 700.5022816980924
+      positionAbsolute:
+        x: 1792.1318612966456
+        y: 700.5022816980924
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '{{#1786092654933.structured_output.text#}}
+
+
+          ### 正在为你挑选适配的咨询师哦，请稍等一下✨
+
+          '
+        selected: false
+        title: 直接回复 3
+        type: answer
+        variables: []
+      height: 134
+      id: '1786092693293'
+      position:
+        x: 2327.5164559993614
+        y: 959.0789311114318
+      positionAbsolute:
+        x: 2327.5164559993614
+        y: 959.0789311114318
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - is_order_time
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - money
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - doctor
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - problem
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - domain
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - round
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - order_doctor
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - doctor_id
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - ordered_time
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - end_time
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - begin_time
+        selected: false
+        title: 变量重置
+        type: assigner
+        version: '2'
+      height: 343
+      id: '1786096337289'
+      position:
+        x: 1140.2466020626741
+        y: 797.4558164656635
+      positionAbsolute:
+        x: 1140.2466020626741
+        y: 797.4558164656635
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786092654933'
+          - structured_output
+          - problem
+          variable_selector:
+          - conversation
+          - problem
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786092654933'
+          - structured_output
+          - domain
+          variable_selector:
+          - conversation
+          - domain
+        selected: false
+        title: 变量赋值 2
+        type: assigner
+        version: '2'
+      height: 109
+      id: '1786097127436'
+      position:
+        x: 2115.9966245378646
+        y: 700.5022816980924
+      positionAbsolute:
+        x: 2115.9966245378646
+        y: 700.5022816980924
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - order_doctor
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - round
+        selected: false
+        title: 变量赋值 3
+        type: assigner
+        version: '2'
+      height: 109
+      id: '1786097356687'
+      position:
+        x: 329.1575399820872
+        y: 1323.1589583212417
+      positionAbsolute:
+        x: 329.1575399820872
+        y: 1323.1589583212417
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: '='
+            id: 98792eaa-de0e-471e-8935-c1cd15fdd964
+            value: '1'
+            varType: number
+            variable_selector:
+            - conversation
+            - round
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 是否是第一轮预约医师对话
+        type: if-else
+      height: 123
+      id: '1786097421296'
+      position:
+        x: -71.40036596716965
+        y: 870.942153580901
+      positionAbsolute:
+        x: -71.40036596716965
+        y: 870.942153580901
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '那我们重新来聊聊好不好，我会安安静静听你诉说的。
+
+          如果不想聊了那下次再见咯
+
+          ฅ・ω・ฅ'
+        selected: false
+        title: 直接回复 4
+        type: answer
+        variables: []
+      height: 131
+      id: '1786253075138'
+      position:
+        x: 1445.652737104789
+        y: 797.4558164656635
+      positionAbsolute:
+        x: 1445.652737104789
+        y: 797.4558164656635
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: empty
+            id: 9c4b6274-6176-48bf-8e6f-3ab90de53e59
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - problem
+          - comparison_operator: '='
+            id: d51ccba7-6af9-4bd8-92f7-f3c4e6bbf123
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - domain
+          id: 'true'
+          logical_operator: or
+        selected: false
+        title: 条件分支 5
+        type: if-else
+      height: 149
+      id: '1786255339592'
+      position:
+        x: 2454.069916376148
+        y: 700.5022816980924
+      positionAbsolute:
+        x: 2454.069916376148
+        y: 700.5022816980924
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: 不好意思呀，我这边有点没能完全理解你的想法，可以和我再多讲讲让你觉得困扰的事情吗(´･_･`)
+        selected: false
+        title: 直接回复 5
+        type: answer
+        variables: []
+      height: 131
+      id: '1786255660715'
+      position:
+        x: 2890.8374846469724
+        y: 730.698627060401
+      positionAbsolute:
+        x: 2890.8374846469724
+        y: 730.698627060401
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            response_format: text
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 0ff98f1d-1c1a-42bc-b707-c7be6ff53b8c
+          role: system
+          text: "## 角色\n你是一个专业的MySQL查询生成器，精通多表关联查询和性能优化。请根据用户问题生成准确、高效的SQL语句。\n\n\
+            ## 任务\n根据用户的问题与提供的{{#conversation.domain#}}（domain_id），生成一个格式清晰、结构明确的JSON数组，其中每个元素是一条合法且性能优化的MySQL查询语句。\n\
+            \n### 表信息与字段说明\n\n**表名及关联关系：**\n\n- `domain`（领域表）  \n  - `domain_id`:\
+            \ 主键，领域ID  \n  - `name`: 领域名称（如“焦虑”、“失眠”）  \n  - `status`: 状态（0表示启用） \
+            \ \n\n- `consultant`（咨询师详情表）  \n  - `consultant_id`: 主键  \n  - `role`:\
+            \ 职位（如“主任医师”）  \n  - `profile`: 简介  \n  - `rate_score`: 评分（整数）  \n  -\
+            \ `price`: 咨询价格（double）  \n  - `admin_id`: 关联后台用户表(`hou_admin`)的外键  \n\
+            \n- `consultant_domain`（咨询师-领域关联表）  \n  - `consultant_domain_id`: 主键 \
+            \ \n  - `consultant_id`: 关联`consultant.consultant_id`  \n  - `domain_id`:\
+            \ 关联`domain.domain_id`  \n\n- `hou_admin`（后台用户表）  \n  - `admin_id`: 主键\
+            \  \n  - `account`: 账号  \n  - `password`: 密码  \n  - `name`: 姓名（咨询师真实姓名）\
+            \  \n  - `status`: 状态（0=审核通过，1=未审核）  \n  - `money`: 余额（无关）  \n  - `is_delete`:\
+            \ 是否删除（0=未删除，1=已删除）  \n  - `role_id`: 角色ID（3表示医师/咨询师）\n\n### 业务规则\n- 只有\
+            \ `hou_admin.role_id = 3` 且 `hou_admin.is_delete = 0` 且 `hou_admin.status\
+            \ = 0` 的用户才是有效的咨询师。\n- 咨询师擅长领域通过 `consultant_domain` 与 `domain` 关联。\n\
+            - 查询结果需包含以下字段（供前端展示）：\n  - 咨询师姓名：`hou_admin.name`\n  - 职位：`consultant.role`\n\
+            \  - 简介：`consultant.profile`\n  - 评分：`consultant.rate_score`\n  - 价格：`consultant.price`\n\
+            \n### 查询要求\n1. 根据用户提供的{{#conversation.domain#}}**领域ID（`domain_id`）**，返回该领域下所有符合条件的咨询师信息。\n\
+            2. 若用户未指定具体领域（{{#conversation.domain#}}为空），可默认查询所有领域及其咨询师（但需按领域分组或排序）。\n\
+            3. 每条SQL应从不同角度切入，例如：\n   - 按评分降序排列\n   - 按价格升序排列\n   - 按评分和价格综合排序\n4.\
+            \ 所有SQL必须语法正确、可执行，并注重性能优化（如使用`INNER JOIN`代替子查询，确保关联字段有索引等）。\n5. 对结果进行排序（如按评分\
+            \ DESC，价格 ASC 等），并合理使用 `LIMIT` 控制返回行数。\n6. 如果用户问题涉及多个维度统计，请为每个维度生成独立的SQL。\n\
+            \n### 输出格式要求\n- 最终输出必须是纯JSON数组格式，以 ```json 开头，以 ``` 结尾，不包含任何额外解释或文本。\n\
+            - 数组中的每个元素为一个对象，仅包含一个字段：`\"sql\"`（字符串类型）。\n- 示例：\n```json\n[\n  { \"sql\"\
+            : \"SELECT ...;\" },\n  { \"sql\": \"SELECT ...;\" }\n]"
+        - id: adb0bf14-2466-4d76-8bed-023795a08a4c
+          role: user
+          text: 查询领域id（domain_id）为{{#conversation.domain#}}的医师信息
+        - id: 24a7a23c-8baa-4faf-b4ce-bdbb17f20469
+          role: assistant
+          text: "[\n  {\n    \"title\": \"按评分从高到低查询焦虑领域咨询师\",\n    \"sql\": \"SELECT\
+            \ h.name AS consultant_name, c.role, c.profile, c.rate_score, c.price\
+            \ FROM consultant c INNER JOIN hou_admin h ON c.admin_id = h.admin_id\
+            \ INNER JOIN consultant_domain cd ON c.consultant_id = cd.consultant_id\
+            \ INNER JOIN domain d ON cd.domain_id = d.domain_id WHERE d.domain_id\
+            \ = 3 AND h.role_id = 3 AND h.is_delete = 0 AND h.status = 0 ORDER BY\
+            \ c.rate_score DESC;\"\n  },\n  {\n    \"title\": \"按价格从低到高查询焦虑领域咨询师（仅前5名）\"\
+            ,\n    \"sql\": \"SELECT h.name AS consultant_name, c.role, c.profile,\
+            \ c.rate_score, c.price FROM consultant c INNER JOIN hou_admin h ON c.admin_id\
+            \ = h.admin_id INNER JOIN consultant_domain cd ON c.consultant_id = cd.consultant_id\
+            \ INNER JOIN domain d ON cd.domain_id = d.domain_id WHERE d.domain_id\
+            \ = 3 AND h.role_id = 3 AND h.is_delete = 0 AND h.status = 0 ORDER BY\
+            \ c.price ASC LIMIT 5;\"\n  }\n]"
+        selected: false
+        title: 查找医师sql生成LLM
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786255929138'
+      position:
+        x: 2662.0417354013202
+        y: 959.0789311114318
+      positionAbsolute:
+        x: 2662.0417354013202
+        y: 959.0789311114318
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "function main({ inputString }) {\n    const reg = /```json\\s*([\\\
+          s\\S]*?)\\s*```/;\n    const patternMatch = inputString.match(reg);\n\n\
+          \    const jsonContent = patternMatch ? patternMatch[1].trim() : inputString.trim();\n\
+          \n    let parsedJson;\n    try {\n        parsedJson = JSON.parse(jsonContent);\n\
+          \    } catch (err) {\n        throw new Error(`JSON 解析失败: ${err.message}`);\n\
+          \    }\n\n    return {\n        result: parsedJson\n    };\n}"
+        code_language: javascript
+        outputs:
+          result:
+            children: null
+            type: array[object]
+        selected: false
+        title: 格式转换1
+        type: code
+        variables:
+        - value_selector:
+          - '1786255929138'
+          - text
+          value_type: string
+          variable: inputString
+      height: 51
+      id: '1786259309706'
+      position:
+        x: 2994.2131187727705
+        y: 959.0789311114318
+      positionAbsolute:
+        x: 2994.2131187727705
+        y: 959.0789311114318
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        error_handle_mode: remove-abnormal-output
+        flatten_output: true
+        height: 305
+        is_parallel: false
+        iterator_input_type: array[object]
+        iterator_selector:
+        - '1786259309706'
+        - result
+        output_selector:
+        - '1786259826825'
+        - json
+        output_type: array[object]
+        parallel_nums: 10
+        selected: false
+        start_node_id: 1786259655144start
+        title: 迭代
+        type: iteration
+        width: 441
+      height: 305
+      id: '1786259655144'
+      position:
+        x: 2328.851165345957
+        y: 1211.6044935311331
+      positionAbsolute:
+        x: 2328.851165345957
+        y: 1211.6044935311331
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 441
+      zIndex: 1
+    - data:
+        desc: ''
+        isInIteration: true
+        selected: false
+        title: ''
+        type: iteration-start
+      draggable: false
+      height: 48
+      id: 1786259655144start
+      parentId: '1786259655144'
+      position:
+        x: 24
+        y: 68
+      positionAbsolute:
+        x: 2352.851165345957
+        y: 1279.6044935311331
+      selectable: false
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom-iteration-start
+      width: 44
+      zIndex: 1002
+    - data:
+        code: "function main({args}) {\n   \t// 提取输入对象的字段\n    \tconst title = args?.title\
+          \ ?? \"\";\n    \tconst sql = args?.sql ?? \"\";\n\t// 返回包含 title 和 sql\
+          \ 的对象\n    \treturn {\n        \ttitle: title,\n    \t\tsql: sql\n    \t\
+          };\n}\n\n"
+        code_language: javascript
+        isInIteration: true
+        isInLoop: false
+        iteration_id: '1786259655144'
+        outputs:
+          sql:
+            children: null
+            type: string
+          title:
+            children: null
+            type: string
+        selected: false
+        title: 迭代内部_代码执行
+        type: code
+        variables:
+        - value_selector:
+          - '1786259655144'
+          - item
+          value_type: object
+          variable: args
+      height: 51
+      id: '1786259723862'
+      parentId: '1786259655144'
+      position:
+        x: 128.9935904457352
+        y: 65.06053107941898
+      positionAbsolute:
+        x: 2457.844755791692
+        y: 1276.665024610552
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 1002
+    - data:
+        isInIteration: true
+        isInLoop: false
+        is_team_authorization: true
+        iteration_id: '1786259655144'
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: The SQL query string.
+            ja_JP: The SQL query string.
+            pt_BR: The SQL query string.
+            zh_Hans: SQL 查询语句。
+          label:
+            en_US: SQL Query
+            ja_JP: SQL Query
+            pt_BR: SQL Query
+            zh_Hans: SQL 查询语句
+          llm_description: The SQL query string.
+          max: null
+          min: null
+          name: query
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            ja_JP: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            pt_BR: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            zh_Hans: 选填，填写后将覆盖授权时填写的数据库连接。
+          label:
+            en_US: DB URI
+            ja_JP: DB URI
+            pt_BR: DB URI
+            zh_Hans: DB URI
+          llm_description: ''
+          max: null
+          min: null
+          name: db_uri
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: json
+          form: form
+          human_description:
+            en_US: Choose the output format.
+            ja_JP: Choose the output format.
+            pt_BR: Choose the output format.
+            zh_Hans: 选择输出格式。
+          label:
+            en_US: Output format
+            ja_JP: Output format
+            pt_BR: Output format
+            zh_Hans: 输出格式
+          llm_description: ''
+          max: null
+          min: null
+          name: format
+          options:
+          - icon: ''
+            label:
+              en_US: JSON
+              ja_JP: JSON
+              pt_BR: JSON
+              zh_Hans: JSON
+            value: json
+          - icon: ''
+            label:
+              en_US: CSV
+              ja_JP: CSV
+              pt_BR: CSV
+              zh_Hans: CSV
+            value: csv
+          - icon: ''
+            label:
+              en_US: YAML
+              ja_JP: YAML
+              pt_BR: YAML
+              zh_Hans: YAML
+            value: yaml
+          - icon: ''
+            label:
+              en_US: Markdown
+              ja_JP: Markdown
+              pt_BR: Markdown
+              zh_Hans: Markdown
+            value: md
+          - icon: ''
+            label:
+              en_US: Excel
+              ja_JP: Excel
+              pt_BR: Excel
+              zh_Hans: Excel
+            value: xlsx
+          - icon: ''
+            label:
+              en_US: HTML
+              ja_JP: HTML
+              pt_BR: HTML
+              zh_Hans: HTML
+            value: html
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            ja_JP: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            pt_BR: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            zh_Hans: '选填项。例如 {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              更多连接选项可参考 https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+          label:
+            en_US: DB Config Options
+            ja_JP: DB Config Options
+            pt_BR: DB Config Options
+            zh_Hans: 数据库连接配置选项
+          llm_description: ''
+          max: null
+          min: null
+          name: config_options
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        params:
+          config_options: ''
+          db_uri: ''
+          format: ''
+          query: ''
+        plugin_id: hjlarry/database
+        plugin_unique_identifier: hjlarry/database:0.0.6@534bc26cf5bc4ff6b5557457452287ccc71f00eef9378784c4f43ca49954ca2f
+        provider_icon: /console/api/workspaces/current/plugin/icon?tenant_id=fe50bf6a-ede5-4f1e-98b4-b500bed225ab&filename=65d2d7404efb4952bb715a35ae79ccce92e70b820fd6cdb74e9acc58a505f7cf.svg
+        provider_id: hjlarry/database/database
+        provider_name: hjlarry/database/database
+        provider_type: builtin
+        selected: false
+        title: SQL Execute
+        tool_configurations:
+          config_options:
+            type: mixed
+            value: null
+          format:
+            type: constant
+            value: json
+        tool_description: 此工具用于在已存在的数据库中执行 SQL 查询。
+        tool_label: SQL Execute
+        tool_name: sql_execute
+        tool_node_version: '2'
+        tool_parameters:
+          db_uri:
+            type: mixed
+            value: null
+          query:
+            type: mixed
+            value: '{{#1786259723862.sql#}}'
+        type: tool
+      height: 113
+      id: '1786259826825'
+      parentId: '1786259655144'
+      position:
+        x: 137.15916583422768
+        y: 161.8824329358797
+      positionAbsolute:
+        x: 2466.0103311801845
+        y: 1373.4869264670128
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 1002
+    - data:
+        answer: '以下为推荐的咨询医师
+
+
+          {{#1786260542155.result#}}
+
+
+          # 如果想要预约的话，可以告诉我你想预约的咨询师哦(≧▽≦)'
+        selected: false
+        title: 直接回复 6
+        type: answer
+        variables: []
+      height: 150
+      id: '1786260339928'
+      position:
+        x: 3170.24779557025
+        y: 1211.6044935311331
+      positionAbsolute:
+        x: 3170.24779557025
+        y: 1211.6044935311331
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "function main({ args }) {\n    // 收集所有结果对象\n    const allItems = [];\n\
+          \    for (const arg of args) {\n        if (arg.result && Array.isArray(arg.result))\
+          \ {\n            allItems.push(...arg.result);\n        }\n    }\n    \n\
+          \    // 按 consultant_name 去重\n    const uniqueMap = new Map();\n    for\
+          \ (const item of allItems) {\n        if (item.consultant_name && !uniqueMap.has(item.consultant_name))\
+          \ {\n            uniqueMap.set(item.consultant_name, item);\n        }\n\
+          \    }\n    \n    // 生成格式化字符串\n    const lines = [];\n    for (const [name,\
+          \ item] of uniqueMap) {\n        const role = item.role || '未知职位';\n   \
+          \     const rate = item.rate_score ?? '暂无评分';\n        const price = item.price\
+          \ ?? '暂无价格';\n        const profile = item.profile || '暂无简介';\n        lines.push(`${name}（${role}）：平均评分为\
+          \ ${rate} 星，咨询价格为 ${price} 元， 其个人简历：${profile}`);\n    }\n    \n    return\
+          \ {\n        result: lines.join('\\n')\n    };\n}"
+        code_language: javascript
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 格式转换2
+        type: code
+        variables:
+        - value_selector:
+          - '1786259655144'
+          - output
+          value_type: array[object]
+          variable: args
+      height: 51
+      id: '1786260542155'
+      position:
+        x: 2843.4866066784903
+        y: 1211.6044935311331
+      positionAbsolute:
+        x: 2843.4866066784903
+        y: 1211.6044935311331
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        instruction: '【指令一·条件判断】
+
+          若会话变量 problem 和 domain 均已有值（即 {{#conversation.problem#}} 与 {{#conversation.domain#}}
+          均不为空），则本节点不再对这两个字段进行提取，直接跳过。
+
+
+          【指令二·医师姓名提取】
+
+          当用户输入中提及医师姓名时，请准确提取医师姓名，存入 doctor 字段。提取规则如下：
+
+          - 优先提取“预约”、“找”、“联系”、“挂号”、“约”、“想看”、“咨询”等动词后面紧跟的人名或称呼
+
+          - 支持中文姓名（如“晓丽”、“李昊游”、“张伟”）和英文名/称呼（如“Doctor H”、“Dr. Smith”）
+
+          - 若姓名后带有职称后缀（如“医师”、“医生”、“咨询师”、“主任”），只提取姓名部分，不包含职称
+
+          - 若用户未提及任何医师姓名，则 doctor 字段返回空字符串
+
+
+          示例：
+
+          用户：“我想预约晓丽医师” → 提取：晓丽
+
+          用户：“帮我预约李昊游咨询师” → 提取：李昊游
+
+          用户：“请约Doctor H” → 提取：Doctor H
+
+          用户：“我想找张伟医生” → 提取：张伟
+
+          用户：“你好，我最近睡不好” → 提取：（空）
+
+
+          【指令三·领域归类】
+
+          当需要提取 domain 时，请根据用户当前描述，从以下五个选项中选出最匹配的一项，并将对应的数字存入 domain 字段：
+
+          - 1 = 头疼：与紧张、压力相关的头部不适，如紧箍感、搏动性疼痛
+
+          - 2 = 失眠：入睡困难、早醒、多梦、睡眠质量差或睡不解乏
+
+          - 3 = 焦虑：过度担忧、紧张不安、心慌、坐立难安、难以放松
+
+          - 4 = 躯体化：无明显生理病因的身体不适，如胃痛、胸闷、乏力、麻木等
+
+          - 5 = 神经敏感：情绪易波动、对外界刺激反应过度、容易被惊吓或感到烦躁
+
+
+          【指令四·问题提取】
+
+          当需要提取 problem 时，从用户描述中提取核心心理问题，用一句简洁的中文短句概括（不超过30字）。若用户未表达任何心理困扰，则 problem
+          返回空字符串。'
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        parameters:
+        - description: 想预约的医师
+          name: doctor
+          required: false
+          type: string
+        - description: 用户的问题
+          name: problem
+          required: false
+          type: string
+        - description: 心理问题领域
+          name: domain
+          required: false
+          type: number
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 参数提取器
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '1786285590738'
+      position:
+        x: 589.6673199240774
+        y: 1323.1589583212417
+      positionAbsolute:
+        x: 589.6673199240774
+        y: 1323.1589583212417
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: ≠
+            id: cef485a6-b384-4060-b2a1-ead6c342200a
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - domain
+          - comparison_operator: not empty
+            id: 9fdb7a5f-f319-48a9-8e64-70d7ebace9a1
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - problem
+          id: 'true'
+          logical_operator: and
+        selected: false
+        title: 条件分支 5
+        type: if-else
+      height: 149
+      id: '1786286421898'
+      position:
+        x: 848.2927569819648
+        y: 1323.1589583212417
+      positionAbsolute:
+        x: 848.2927569819648
+        y: 1323.1589583212417
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786285590738'
+          - domain
+          variable_selector:
+          - conversation
+          - domain
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786285590738'
+          - problem
+          variable_selector:
+          - conversation
+          - problem
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786285590738'
+          - doctor
+          variable_selector:
+          - conversation
+          - doctor
+        selected: false
+        title: 变量赋值 4
+        type: assigner
+        version: '2'
+      height: 135
+      id: '1786286475424'
+      position:
+        x: 1184.7663971178154
+        y: 1427.141970850083
+      positionAbsolute:
+        x: 1184.7663971178154
+        y: 1427.141970850083
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786285590738'
+          - doctor
+          variable_selector:
+          - conversation
+          - doctor
+        selected: false
+        title: 变量赋值 5
+        type: assigner
+        version: '2'
+      height: 83
+      id: '1786286485651'
+      position:
+        x: 1184.7663971178154
+        y: 1323.1589583212417
+      positionAbsolute:
+        x: 1184.7663971178154
+        y: 1323.1589583212417
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: empty
+            id: 59d0bb8c-fd69-4480-b536-accd613f3048
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - doctor
+          id: 'true'
+          logical_operator: and
+        - case_id: 5237d87e-0f8d-4533-ae4e-47876a0c88bf
+          conditions:
+          - comparison_operator: empty
+            id: 43344b03-28e3-4729-bb64-cd1d70dafad1
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - problem
+          id: 5237d87e-0f8d-4533-ae4e-47876a0c88bf
+          logical_operator: and
+        - case_id: 69c7ca1c-ba2b-4f61-a7a8-84f33b45dbb9
+          conditions:
+          - comparison_operator: '='
+            id: 0d969007-355a-4206-b30d-2038d93529ea
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - domain
+          id: 69c7ca1c-ba2b-4f61-a7a8-84f33b45dbb9
+          logical_operator: and
+        selected: false
+        title: 条件分支 6
+        type: if-else
+      height: 219
+      id: '1786286894818'
+      position:
+        x: 306.2226531497133
+        y: 1579.6354648197835
+      positionAbsolute:
+        x: 306.2226531497133
+        y: 1579.6354648197835
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786328849097'
+          - doctor
+          variable_selector:
+          - conversation
+          - doctor
+        selected: false
+        title: 更新医师
+        type: assigner
+        version: '2'
+      height: 83
+      id: '1786288212615'
+      position:
+        x: 936.2816841746297
+        y: 1579.6354648197835
+      positionAbsolute:
+        x: 936.2816841746297
+        y: 1579.6354648197835
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786328877986'
+          - problem
+          variable_selector:
+          - conversation
+          - problem
+        selected: false
+        title: 更新问题
+        type: assigner
+        version: '2'
+      height: 83
+      id: '1786288368532'
+      position:
+        x: 936.2816841746297
+        y: 1681.0644599908665
+      positionAbsolute:
+        x: 936.2816841746297
+        y: 1681.0644599908665
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786328877986'
+          - domain
+          variable_selector:
+          - conversation
+          - domain
+        selected: false
+        title: 更新领域
+        type: assigner
+        version: '2'
+      height: 83
+      id: '1786288406740'
+      position:
+        x: 936.2816841746297
+        y: 1782.424621385616
+      positionAbsolute:
+        x: 936.2816841746297
+        y: 1782.424621385616
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 574fe03d-afc8-42b8-b1e5-9125900e454b
+          role: system
+          text: "# 角色\n你是一位专业的心理咨询流程控制助手。你的职责是检查当前对话中已收集到的信息，判断哪些字段还缺失，并生成清晰的指引提醒用户补充。\n\
+            \n# 待检查字段\n请检查以下三个会话变量的值：\n- doctor：{{#conversation.doctor#}}（医师姓名，字符串类型，空表示未填写）\n\
+            - problem：{{#conversation.problem#}}（心理问题描述，字符串类型，空表示未填写）\n- domain：{{#conversation.domain#}}（心理领域编号，数字类型，0\
+            \ 表示未识别或未填写）\n\n# 判断逻辑\n1. 若三个字段均已填写且 domain ≠ 0，则不进行输出\n2. 若存在缺失字段，则生成一段自然、友好的提醒文案，告知用户还需要补充哪些信息。\n\
+            3. 如果用户表示不想聊了或者想重新开始对话则将structured_output的status赋值为2，否则赋值为1，赋值必须为number类型（必须判断，否则重新执行）\n\
+            \n# 提醒文案要求\n- 语气温暖、亲切，符合心理咨询场景\n- 根据缺失字段数量，使用不同的表达方式：\n  - 缺失 3 个：请用户完整描述自己的情况和需求\n\
+            \  - 缺失 2 个：提醒用户补充缺少的两项内容\n  - 缺失 1 个：提醒用户补充缺少的那一项内容\n- 适当引导用户具体要说什么（给出示例）\n\
+            - 你只负责提醒用户填写doctor problem domain这几个内容，不要提醒用户填写除了doctor problem domain以外的东西（例如预约时间）\n\
+            \n# 各字段对应的问题引导\n- doctor 缺失：引导用户说明希望预约哪位医师，或告知用户\"您想预约哪位医师呢？请告诉我姓名～\"\n\
+            - problem 缺失：引导用户简单描述自己的困扰或需要解决的问题\n- domain 缺失：引导用户说明自己的具体症状或感受，以便进行领域归类\n\
+            \n# 输出格式\n- 若{{#conversation.doctor#}}{{#conversation.problem#}}{{#conversation.domain#}}全部填写则不输出，否则返回提醒文案。\n\
+            \n# 示例\n- 用户已提供：doctor=\"晓丽\"，problem=\"因长期压力导致情绪低落\"，domain=3\n  → 输出：{}\n\
+            \n- 用户已提供：doctor=\"\"，problem=\"因失眠导致白天精神不振\"，domain=2\n  → 输出：{您已经告诉了我您的困扰和所属的领域，但还没有告知想预约哪位医师。您希望预约哪位医师呢？请告诉我她的名字～}\n\
+            \n- 用户已提供：doctor=\"Doctor H\"，problem=\"\"，domain=0\n  → 输出：{您已经告知了想预约的医师是\
+            \ Doctor H，不过我还想多了解一下您的情况。方便简单描述一下您最近遇到的困扰吗？以及您目前有哪些不舒服的感受呢？这些信息能帮助我更好地为您匹配合适的咨询师～}\n\
+            \n- 用户已提供：doctor=\"\"，problem=\"\"，domain=0\n  → 输出：{为了能更好地帮助您，我需要了解几个信息：首先，您想预约哪位医师呢？其次，您最近遇到了什么困扰，或者有什么想和我聊聊的吗？您描述得越详细，我越能为您提供准确的帮助哦～}"
+        - id: 5284c1ce-1918-4c76-9d12-220b956ff9e2
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        structured_output:
+          schema:
+            additionalProperties: false
+            properties:
+              status:
+                description: 聊天意愿
+                type: number
+              text:
+                description: ai输出的内容
+                type: string
+            required: []
+            type: object
+        structured_output_enabled: true
+        title: 查找没填写的字段
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786288436497'
+      position:
+        x: 1241.3688767873437
+        y: 1681.0644599908665
+      positionAbsolute:
+        x: 1241.3688767873437
+        y: 1681.0644599908665
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: 75f35dbf-5c7b-493c-b218-190d8ca64906
+          conditions:
+          - comparison_operator: '='
+            id: 1ee7670b-300a-4c7e-9db1-0546a146d94a
+            value: '2'
+            varType: number
+            variable_selector:
+            - '1786288436497'
+            - structured_output
+            - status
+          id: 75f35dbf-5c7b-493c-b218-190d8ca64906
+          logical_operator: and
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: empty
+            id: 47fb4fb8-1fa0-41b5-90ef-2efe5e88bf54
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - doctor
+          - comparison_operator: empty
+            id: 70bad457-4ef7-49fb-a2db-e97f36490897
+            value: ''
+            varType: string
+            variable_selector:
+            - conversation
+            - problem
+          - comparison_operator: '='
+            id: 118fd506-d100-44ed-9235-0500a0f5f79f
+            value: '0'
+            varType: number
+            variable_selector:
+            - conversation
+            - domain
+          id: 'true'
+          logical_operator: or
+        selected: false
+        title: 条件分支 7
+        type: if-else
+      height: 247
+      id: '1786288504742'
+      position:
+        x: 1537.9570417240311
+        y: 1681.0644599908665
+      positionAbsolute:
+        x: 1537.9570417240311
+        y: 1681.0644599908665
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '{{#1786288436497.structured_output.text#}}'
+        selected: false
+        title: 直接回复 7
+        type: answer
+        variables: []
+      height: 102
+      id: '1786288548592'
+      position:
+        x: 1871.1485201716764
+        y: 1712.308386084324
+      positionAbsolute:
+        x: 1871.1485201716764
+        y: 1712.308386084324
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            response_format: text
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 04c10267-56d2-4704-b437-3fed4c0c1602
+          role: system
+          text: "# 角色\n你是一个专业的MySQL查询生成器，精通多表关联查询、子查询和聚合函数。请根据用户提供的医师姓名（模糊查询），生成一条完整的SQL查询语句，一次性返回所需的所有字段。\n\
+            \n# 任务\n根据用户输入的医师姓名（通过变量 {{#conversation.doctor#}} 传入），从数据库中查询该医师的以下五个字段，并以JSON数组格式输出一条SQL语句。\n\
+            \n## 需要查询的五个字段\n1. `consultant_id`：咨询师ID（来自 `consultant` 表）\n2. `price`：咨询费用（来自\
+            \ `consultant` 表）\n3. `begin_time`：该咨询师**最晚一次**设置的可预约时间的开始时间（来自 `scheduling`\
+            \ 表，取 `begin_time` 最大的那条记录）\n4. `end_time`：该咨询师**最晚一次**设置的可预约时间的结束时间（与\
+            \ `begin_time` 同一条记录的 `end_time`）\n5. `orderedTime`：该咨询师在 `reservation`\
+            \ 表中所有预约记录的 `order_time`，以 **JSON 数组（List<String>）** 形式返回（使用 `JSON_ARRAYAGG`\
+            \ 聚合）\n\n## 表信息与字段说明\n\n### 1. `consultant`（咨询师详情表）\n| 字段名 | 类型 | 说明 |\n\
+            |--------|------|------|\n| consultant_id | int | 主键，咨询师ID |\n| school\
+            \ | varchar(255) | 毕业院校 |\n| role | varchar(255) | 职位 |\n| project | varchar(255)\
+            \ | 专业背景 |\n| profile | varchar(255) | 简介 |\n| rate_score | int | 评分 |\n\
+            | price | double | 咨询价格 |\n| admin_id | int | 关联 `hou_admin.admin_id`\
+            \ |\n| head_picture | varchar(255) | 头像 |\n| create_time | datetime |\
+            \ 创建时间 |\n| update_time | datetime | 修改时间 |\n\n### 2. `hou_admin`（后台用户表）\n\
+            | 字段名 | 类型 | 说明 |\n|--------|------|------|\n| admin_id | int | 主键，后台人员ID\
+            \ |\n| account | varchar(255) | 账号 |\n| password | varchar(255) | 密码 |\n\
+            | name | varchar(255) | 姓名（咨询师真实姓名） |\n| status | int | 状态（0=审核通过，1=未审核）\
+            \ |\n| money | double | 余额 |\n| is_delete | int | 是否删除（0=未删除，1=已删除） |\n\
+            | role_id | int | 角色ID（3表示医师/咨询师） |\n| create_time | datetime | 创建时间 |\n\
+            | update_time | datetime | 修改时间 |\n\n### 3. `scheduling`（排班表）\n| 字段名 |\
+            \ 类型 | 说明 |\n|--------|------|------|\n| scheduling_id | int | 主键，排班ID\
+            \ |\n| consultant_id | int | 咨询师ID，关联 `consultant.consultant_id` |\n|\
+            \ begin_time | varchar(255) | 开始时间（格式如 '2026-03-20'） |\n| end_time | varchar(255)\
+            \ | 结束时间（格式同 begin_time） |\n| status | int | 预约状态（1表示已失效，0表示有效） |\n| create_time\
+            \ | datetime | 创建时间 |\n| update_time | datetime | 修改时间 |\n\n### 4. `reservation`（预约表）\n\
+            | 字段名 | 类型 | 说明 |\n|--------|------|------|\n| reservation_id | int |\
+            \ 主键，预约ID |\n| user_id | int | 用户ID |\n| domain_id | int | 领域ID |\n| consultant_id\
+            \ | int | 咨询师ID，关联 `consultant.consultant_id` |\n| status | int | 状态（0未审核，1通过，2完成，3取消）\
+            \ |\n| money | double | 费用 |\n| order_time | varchar(255) | 预约日期（如 '2026-03-12\
+            \ 08:00:00'） |\n| problem | varchar(255) | 问题描述 |\n| answer | varchar(255)\
+            \ | 专家回答 |\n| rate_score | int | 评价打分 |\n| rate | varchar(255) | 用户评价\
+            \ |\n| rate_time | varchar(255) | 评价时间 |\n| create_time | datetime | 创建时间\
+            \ |\n| update_time | datetime | 修改时间 |\n\n## 业务规则与查询逻辑\n- 有效咨询师条件：`hou_admin.role_id\
+            \ = 3` 且 `hou_admin.is_delete = 0` 且 `hou_admin.status = 0`\n- 医师姓名匹配：使用\
+            \ `hou_admin.name LIKE CONCAT('%', {{#conversation.doctor#}}, '%')` 进行模糊查询（**变量值替换规则：生成SQL时，直接将\
+            \ {{#conversation.doctor#}} 替换为该变量的实际值，不要保留为占位符！**）\n- **最晚一次排班**：取 `scheduling`\
+            \ 表中该 `consultant_id` 的 `begin_time` 最大的那条记录（若多条相同则取 `end_time` 最大），并返回该记录的\
+            \ `begin_time` 和 `end_time`\n- **预约时间列表**：从 `reservation` 表中取出该 `consultant_id`\
+            \ 的所有 `order_time`，使用 `JSON_ARRAYAGG` 聚合成一个 JSON 数组（若没有记录则返回空数组 `[]`）\n\
+            \n## SQL 生成要求\n- 必须生成 **一条SQL语句**，一次性返回所有五个字段\n- **关键规则**：模糊查询的医师姓名必须是\
+            \ {{#conversation.doctor#}} 变量的**实际值**，而不是任何其他名字（例如“晓丽”、“Doctor H”等）。在生成SQL时，请将该变量替换为其实际值。\n\
+            - 使用 `LEFT JOIN` 连接 `consultant` 和 `hou_admin`，使用子查询获取最晚排班，使用聚合函数获取预约时间列表\n\
+            - 由于聚合函数（`JSON_ARRAYAGG`）需要 `GROUP BY`，请确保 `GROUP BY` 包含 `consultant.consultant_id`\
+            \ 和 `consultant.price`\n- 若查询结果为空（无匹配医师），SQL 应返回空结果集（0行）\n- 所有字段名和表名必须与上述定义完全一致，注意大小写（建议全部小写）\n\
+            - 性能优化：在 `hou_admin.name` 上使用索引（如果存在），使用 `INNER JOIN` 替代子查询（如适用）\n\n##\
+            \ 输出格式要求\n- 最终输出必须是纯JSON数组格式，以 ```json 开头，以 ``` 结尾，不包含任何额外解释或文本。\n- 数组中的每个元素为一个对象，仅包含一个字段：`\"\
+            sql\"`（字符串类型）。\n- 所有文本值必须用单引号 ' 包围,例如ha.name LIKE CONCAT('%', 'Miss ff0',\
+            \ '%')\n- 示例：\n```json\n[\n  { \"sql\": \"SELECT ...;\" }\n]"
+        - id: bf52cd85-91ad-4d09-ae0b-628ff782806a
+          role: assistant
+          text: "[\n  {\n    \"sql\": \"SELECT c.consultant_id, c.price, (SELECT s.begin_time\
+            \ FROM scheduling s WHERE s.consultant_id = c.consultant_id AND s.status\
+            \ = 0 ORDER BY STR_TO_DATE(s.begin_time, '%Y-%m-%d') DESC LIMIT 1) AS\
+            \ begin_time, (SELECT s.end_time FROM scheduling s WHERE s.consultant_id\
+            \ = c.consultant_id AND s.status = 0 ORDER BY STR_TO_DATE(s.begin_time,\
+            \ '%Y-%m-%d') DESC LIMIT 1) AS end_time, COALESCE((SELECT JSON_ARRAYAGG(r.order_time)\
+            \ FROM reservation r WHERE r.consultant_id = c.consultant_id), JSON_ARRAY())\
+            \ AS orderedTime FROM consultant c INNER JOIN hou_admin ha ON c.admin_id\
+            \ = ha.admin_id WHERE ha.name LIKE CONCAT('%', '{{#conversation.doctor#}}',\
+            \ '%') AND ha.role_id = 3 AND ha.is_delete = 0 AND ha.status = 0 GROUP\
+            \ BY c.consultant_id, c.price;\"\n  }\n]"
+        selected: false
+        title: 查询医师sql生成llm
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786289792989'
+      position:
+        x: 301.4529556495561
+        y: 2037.382147860621
+      positionAbsolute:
+        x: 301.4529556495561
+        y: 2037.382147860621
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "function main({ inputString }) {\n    const reg = /```json\\s*([\\\
+          s\\S]*?)\\s*```/;\n    const patternMatch = inputString.match(reg);\n\n\
+          \    const jsonContent = patternMatch ? patternMatch[1].trim() : inputString.trim();\n\
+          \n    let parsedJson;\n    try {\n        parsedJson = JSON.parse(jsonContent);\n\
+          \    } catch (err) {\n        throw new Error(`JSON 解析失败: ${err.message}`);\n\
+          \    }\n\n    return {\n        result: parsedJson\n    };\n}"
+        code_language: javascript
+        outputs:
+          result:
+            children: null
+            type: array[object]
+        selected: false
+        title: 格式转换3
+        type: code
+        variables:
+        - value_selector:
+          - '1786289792989'
+          - text
+          value_type: string
+          variable: inputString
+      height: 51
+      id: '1786289924552'
+      position:
+        x: 653.2238980663444
+        y: 2037.382147860621
+      positionAbsolute:
+        x: 653.2238980663444
+        y: 2037.382147860621
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        cases:
+        - case_id: ec40f8ad-2aeb-4983-b374-fea3a8d37d17
+          conditions:
+          - comparison_operator: empty
+            id: f5579b7b-0304-40f9-9b4a-e8533853071c
+            value: ''
+            varType: number
+            variable_selector:
+            - '1786290424732'
+            - consultant_id
+          id: ec40f8ad-2aeb-4983-b374-fea3a8d37d17
+          logical_operator: and
+        - case_id: 'true'
+          conditions:
+          - comparison_operator: empty
+            id: 60dcd475-792c-4813-b912-c796fc8a143e
+            value: ''
+            varType: string
+            variable_selector:
+            - '1786290424732'
+            - begin_time
+          - comparison_operator: empty
+            id: 99568d52-decd-455d-a7fd-8531336ef76e
+            value: ''
+            varType: string
+            variable_selector:
+            - '1786290424732'
+            - end_time
+          id: 'true'
+          logical_operator: or
+        selected: false
+        title: 条件分支 8
+        type: if-else
+      height: 213
+      id: '1786290029102'
+      position:
+        x: 1755.7324451750922
+        y: 2108.1432224798996
+      positionAbsolute:
+        x: 1755.7324451750922
+        y: 2108.1432224798996
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: 暂时没有匹配到您说的医师哦～你回忆一下，是不是记错了名字？我随时等着帮你核对！
+        selected: false
+        title: 直接回复 8
+        type: answer
+        variables: []
+      height: 131
+      id: '1786290108978'
+      position:
+        x: 2162.9085001005587
+        y: 2095.8076885242463
+      positionAbsolute:
+        x: 2162.9085001005587
+        y: 2095.8076885242463
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            response_format: text
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 2031e608-080e-447c-a987-540080905c86
+          role: system
+          text: "# 角色\n你是一位专业的预约处理助手，负责从用户对话中提取预约时间，并生成相应的数据库插入语句。\n\n# 任务\n1. **提取预约时间**：根据用户输入，解析出用户期望的预约日期和具体时间，存入\
+            \ `structured_output` 的 `order_time` 字段（格式：`YYYY-MM-DD HH:MM:SS`）。\n2.\
+            \ **时间规范化**：用户指定的时间必须归一化为以下四个固定时间段之一：`08:00:00`、`10:00:00`、`14:00:00`、`16:00:00`。选择规则如下：\n\
+            \   - 若用户未指定具体时间，默认取 `10:00:00`。\n   - 若用户指定了时间（如“下午三点”、“上午9点”），取与指定时间最接近的固定时间段（按分钟差最小，平局取较晚的）。\n\
+            \   - 若用户指定了非固定时间段（如“15:30”），同样取最近的固定时间段。\n   - 当前时间由变量 `{{#1786349974460.text#}}`\
+            \ 提供（格式：`YYYY-MM-DD HH:MM:SS`）。\n3. **日期解析**：\n   - 支持相对日期：如“今天”、“明天”、“后天”（后两天）、“下周一”等（基于当前日期计算）。\n\
+            \   - 支持绝对日期：如“8月15日”、“2026-08-20”等。\n   - 若用户未指定日期，默认取当前日期（但需确保时间晚于当前时间，若早于当前时间则自动顺延一天）。\n\
+            4. **生成插入SQL**：在 `text` 字段中输出一条完整的 `INSERT INTO reservation` SQL语句，插入以下字段：\n\
+            \   - `user_id`：`{{#sys.user_id#}}`\n   - `domain_id`：`{{#conversation.domain#}}`\n\
+            \   - `consultant_id`：`{{#conversation.doctor_id#}}`\n   - `money`：`{{#conversation.money#}}`\n\
+            \   - `order_time`：提取并规范化后的时间\n   - `problem`：`{{#conversation.problem#}}`\n\
+            \   - `create_time` 和 `update_time` 使用 `NOW()` 自动填充。\n\n# 限制\n- 提取的时间必须晚于当前时间（若早于当前时间，自动顺延到明天同一时间）。\n\
+            - 若用户未提及任何时间信息，则输出提示：“请告诉我您希望预约的具体日期和时间（如：后天下午3点）”，且不生成SQL。\n- 生成的SQL必须语法正确，表名和字段名与MySQL表结构一致。\n\
+            - `text` 中只输出SQL语句，不要包含其他解释；`structured_output.order_time` 只输出格式化时间字符串。\n\
+            \n# 示例\n**当前时间**：`2026-08-10 09:30:00`\n\n**用户输入**：“我想预约后天下午3点”\n- 解析：后天\
+            \ = 2026-08-12，下午3点 = 15:00，最接近16:00 → 规范化时间：`2026-08-12 16:00:00`\n-\
+            \ `structured_output.order_time`：`\"2026-08-12 15:00:00\"`，存入数据库的order_time用规范化时间，存入structured_output.order_time用用户给出的时间\n\
+            \n## 输出格式要求\n- 最终输出必须是纯JSON数组格式，以 ```json 开头，以 ``` 结尾，不包含任何额外解释或文本。\n\
+            - `structured_output` 中必须包含两个字段：\n  - `order_time`：用户实际期望的预约时间（字符串类型，格式：`YYYY-MM-DD\
+            \ HH:MM:SS`）（一定要有！！！！）\n  - `sql`：生成的 INSERT SQL 语句（字符串类型）\n- 示例：\n```json\n\
+            [\n  { \"order_time\": \"2026-08-12 15:00:00\",\"sql\": \"INSERT ...;\"\
+            \ }\n]"
+        - id: 0fbf558a-83b3-4e74-9e0a-c69bb1a00574
+          role: user
+          text: '{{#sys.query#}}'
+        - id: 6b40b5ba-6b21-401c-aa7f-46753a53aaaf
+          role: assistant
+          text: "[\n  {\n    \"sql\": \"INSERT INTO reservation (user_id, domain_id,\
+            \ consultant_id, money, order_time, problem, create_time, update_time)\n\
+            VALUES ({{#sys.user_id#}}, {{#conversation.domain#}}, {{#conversation.doctor_id#}},\
+            \ {{#conversation.money#}}, '2026-08-11 14:00:00', '{{#conversation.problem#}}',\
+            \ NOW(), NOW());“\n  }\n]"
+        selected: false
+        structured_output:
+          schema:
+            additionalProperties: false
+            properties:
+              order_time:
+                description: 预约的时间
+                type: string
+            required: []
+            type: object
+        structured_output_enabled: true
+        title: 生成预约插入语句
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786290154640'
+      position:
+        x: 2249.722660870294
+        y: 248.5434828669533
+      positionAbsolute:
+        x: 2249.722660870294
+        y: 248.5434828669533
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786290424732'
+          - consultant_id
+          variable_selector:
+          - conversation
+          - doctor_id
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786290424732'
+          - orderedTime
+          variable_selector:
+          - conversation
+          - ordered_time
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786290424732'
+          - end_time
+          variable_selector:
+          - conversation
+          - end_time
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786290424732'
+          - begin_time
+          variable_selector:
+          - conversation
+          - begin_time
+        - input_type: variable
+          operation: over-write
+          value:
+          - '1786290424732'
+          - price
+          variable_selector:
+          - conversation
+          - money
+        selected: false
+        title: 插入医师信息
+        type: assigner
+        version: '2'
+      height: 187
+      id: '1786290262411'
+      position:
+        x: 301.4529556495561
+        y: 2362.581992464081
+      positionAbsolute:
+        x: 301.4529556495561
+        y: 2362.581992464081
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "function main({ args }) {\n    // args 是 String 类型，内容是 JSON 数组字符串\n\
+          \    // 示例：args = \"[{\\\"sql\\\": \\\"INSERT ...\\\"}]\"\n    const raw\
+          \ = args || '';\n    if (!raw) return { result: '' };\n\n    try {\n   \
+          \     const parsed = JSON.parse(raw);\n        // parsed 是数组 [{ sql: \"\
+          INSERT ...\" }]\n        const sql = parsed?.[0]?.sql || parsed?.sql ||\
+          \ '';\n        return { result: sql };\n    } catch (e) {\n        // 解析失败，用正则兜底\n\
+          \        const match = raw.match(/INSERT\\s+.*?;/i);\n        return { result:\
+          \ match ? match[0] : '' };\n    }\n}"
+        code_language: javascript
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 格式转换4
+        type: code
+        variables:
+        - value_selector:
+          - '1786290154640'
+          - text
+          value_type: string
+          variable: args
+      height: 51
+      id: '1786290301879'
+      position:
+        x: 2564.0092694052696
+        y: 248.5434828669533
+      positionAbsolute:
+        x: 2564.0092694052696
+        y: 248.5434828669533
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        code: "function main({ args }) {\n    const input = args[0] || {};\n    const\
+          \ record = input?.result?.[0];\n\n    // 处理 orderedTime：确保返回数组\n    let\
+          \ orderedTime = [];\n    if (record?.orderedTime) {\n        if (typeof\
+          \ record.orderedTime === 'string') {\n            try {\n              \
+          \  const parsed = JSON.parse(record.orderedTime);\n                orderedTime\
+          \ = Array.isArray(parsed) ? parsed : [];\n            } catch (e) {\n  \
+          \              orderedTime = [];\n            }\n        } else if (Array.isArray(record.orderedTime))\
+          \ {\n            orderedTime = record.orderedTime;\n        }\n    }\n\n\
+          \    return {\n        begin_time: record?.begin_time ?? null,\n       \
+          \ consultant_id: record?.consultant_id ?? 0,\n        end_time: record?.end_time\
+          \ ?? null,\n        orderedTime: orderedTime,\n        price: record?.price\
+          \ ?? null\n    };\n}"
+        code_language: javascript
+        outputs:
+          begin_time:
+            children: null
+            type: string
+          consultant_id:
+            children: null
+            type: number
+          end_time:
+            children: null
+            type: string
+          orderedTime:
+            children: null
+            type: array[string]
+          price:
+            children: null
+            type: number
+        selected: false
+        title: 生成格式处理
+        type: code
+        variables:
+        - value_selector:
+          - '17863437111880'
+          - json
+          value_type: array[object]
+          variable: args
+      height: 51
+      id: '1786290424732'
+      position:
+        x: 1355.0339928322726
+        y: 2108.1432224798996
+      positionAbsolute:
+        x: 1355.0339928322726
+        y: 2108.1432224798996
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '### 已为您成功预约医师
+
+          请确认预约信息
+
+          -医师：{{#conversation.doctor#}}
+
+          -所需费用：{{#conversation.money#}}
+
+          -问题烦恼：{{#conversation.problem#}}
+
+          -预约时间：{{#1786290154640.structured_output.order_time#}}
+
+
+          若不满意可随时在平台上取消预约哦'
+        selected: false
+        title: 直接回复 9
+        type: answer
+        variables: []
+      height: 194
+      id: '1786290478220'
+      position:
+        x: 3213.9658616634392
+        y: 248.5434828669533
+      positionAbsolute:
+        x: 3213.9658616634392
+        y: 248.5434828669533
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '以下是该医师可预约的日期，请选一个日期吧
+
+          {{#1786347324504.text#}}
+
+
+          ### 若没有合适时间或不想预约该医师了可以和我说一下哦'
+        selected: false
+        title: 直接回复 10
+        type: answer
+        variables: []
+      height: 150
+      id: '1786290633760'
+      position:
+        x: 1755.7324451750922
+        y: 2362.581992464081
+      positionAbsolute:
+        x: 1755.7324451750922
+        y: 2362.581992464081
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - is_order_time
+        selected: false
+        title: 变量赋值 10
+        type: assigner
+        version: '2'
+      height: 83
+      id: '1786290859809'
+      position:
+        x: 1355.0339928322726
+        y: 2362.581992464081
+      positionAbsolute:
+        x: 1355.0339928322726
+        y: 2362.581992464081
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        classes:
+        - id: '1'
+          label: 说明预约时间
+          name: '用户明确给出了合理的预约时间，需同时满足以下条件：
+
+            · 用户输入中包含了具体的日期信息（如“今天”、“明天”、“后天”、“X月X日”、“下周一”等）和具体的时间信息（如“上午X点”、“下午X点”、“X:XX”等），且日期时间整体清晰可辨
+
+            · 预约日期在 begin_time 与 end_time 之间（含两端）
+
+            · 预约的具体时间段不在 orderedTime 已有的预约列表中'
+        - id: '1786325045662'
+          label: 预约时间错误
+          name: '用户给出的预约时间存在以下任一问题：
+
+            · 预约日期不在 {{#conversation.begin_time#}} 与 {{#conversation.end_time#}} 之间
+
+            · 预约的具体时间段与 {{#conversation.orderedTime#}} 中的已有记录重复
+
+            · 用户输入中仅有模糊的时间意向（如“有空的时候”、“尽快”、“最近”），缺少可解析的具体日期或具体时间
+
+            · 用户输入的时间格式无法被准确解析（如仅说“下午”但未给出具体时间点）'
+        - id: '2'
+          label: 重置
+          name: 用户表达了不想继续预约、想重新开始的意图。例如："我不想预约了","没有合适的预约时间","我想重新预约","换一个预约医师"。该分类旨在清空当前对话上下文，重新初始化对话状态。
+        - id: '1786431203194'
+          label: 其他
+          name: 用户既没有提日期的事情（如“今天”、“明天”、“后天”、“X月X日”、“下周一”等），或者用户也没有表达不想继续预约、想重新开始的意图
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        query_variable_selector:
+        - '1786065598757'
+        - sys.query
+        selected: false
+        title: 问题分类器 2
+        type: question-classifier
+        vision:
+          enabled: false
+      height: 261
+      id: '1786290921736'
+      position:
+        x: 1949.991234079009
+        y: 240.57629460423175
+      positionAbsolute:
+        x: 1949.991234079009
+        y: 240.57629460423175
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '很遗憾，你挑的时间暂时约不上或者表达不明确～请再找个合适的时间段进行预约吧，总有一个时间适合你的！
+
+
+          ### 若没有合适时间或不想预约该医师了可以和我说一下哦'
+        selected: false
+        title: 直接回复 11
+        type: answer
+        variables: []
+      height: 163
+      id: '1786327104514'
+      position:
+        x: 2564.0092694052696
+        y: 360.67846444300073
+      positionAbsolute:
+        x: 2564.0092694052696
+        y: 360.67846444300073
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        instruction: '从用户的当前输入中提取医师姓名。
+
+          医师姓名通常是中文名（如“晓丽”、“张伟”）或英文名（如“Doctor H”、“Smith”）。
+
+          提取规则：
+
+          - 优先提取“预约”、“找”、“联系”、“挂号”、“约”、“想看”等动词后面紧跟的人名。
+
+          - 如果用户直接提及姓名（如“我想预约晓丽”），则提取“晓丽”。
+
+          - 如果用户未提及任何医师姓名，则返回空字符串。
+
+
+          示例：
+
+          用户：“我想预约Doctor H” → 提取：Doctor H
+
+          用户：“帮我预约晓丽医师” → 提取：晓丽
+
+          用户：“请帮我约张伟医生” → 提取：张伟
+
+          用户：“我想咨询一下” → 提取：（空）'
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        parameters:
+        - description: 提取医师名称
+          name: doctor
+          required: false
+          type: string
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 提取医师
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '1786328849097'
+      position:
+        x: 621.3145971308359
+        y: 1572.3267037168034
+      positionAbsolute:
+        x: 621.3145971308359
+        y: 1572.3267037168034
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        instruction: "# 角色\n你是一位专业的心理问题分析助手，负责从用户当前输入中提取核心心理问题，并归类到预定义的领域。\n\n# 任务\n\
+          1. **问题提取**：从用户输入中提取核心心理问题，用一句简洁、完整的话概括，包含问题核心和具体表现（如适用）。\n2. **领域归类**：根据用户描述，从以下五个领域中选择最匹配的一项，返回对应的数字。\n\
+          \n**领域选项**：\n- **1 = 头疼**：与紧张、压力相关的头部不适，如紧箍感、搏动性疼痛、头胀\n- **2 = 失眠**：入睡困难、早醒、多梦、睡眠质量差、睡不解乏、夜间易醒\n\
+          - **3 = 焦虑**：过度担忧、紧张不安、心慌、坐立难安、难以放松、恐慌感\n- **4 = 躯体化**：无明显生理病因的身体不适，如胃痛、胸闷、乏力、麻木、心悸\n\
+          - **5 = 神经敏感**：情绪易波动、对外界刺激反应过度、容易被惊吓、烦躁易怒\n\n# 处理规则\n1. **问题提取规则**：\n  \
+          \ - 概括格式：问题核心 + 具体表现（如：“因长期工作压力导致持续失眠和情绪低落”）\n   - 若用户只是简单打招呼（如“你好”、“在吗”）或与心理无关（如“今天天气怎么样”），则返回空字符串\n\
+          \   - 字数不超过30字\n\n2. **领域归类规则**：\n   - 若描述涉及多个领域，选择**最核心、最突出**的一个\n   -\
+          \ 若输入与心理领域无关，返回 **0**\n   - 仅基于当前输入判断，不结合历史对话\n\n# 示例\n用户：\"我最近总是失眠，躺下脑子里就乱糟糟的\"\
+          \n→ problem：\"因入睡困难及夜间思维活跃导致持续失眠\"\n→ domain：2\n\n用户：\"我最近压力好大，感觉什么都不想做\"\
+          \n→ problem：\"因长期压力导致动力缺失及情绪低落\"\n→ domain：3\n\n用户：\"我压力大的时候就会偏头痛\"\n→ problem：\"\
+          因压力引发紧张性头痛\"\n→ domain：1\n\n用户：\"你好\"\n→ problem：\"\"\n→ domain：0\n\n用户：\"\
+          我想预约Doctor H\"\n→ problem：\"\"\n→ domain：0\n\n# 输出格式\n- `problem`：字符串，一句话概括核心心理问题（空字符串表示无提取内容）\n\
+          - `domain`：数字，对应领域编号（0表示无法归类或非心理问题）\n\n# 限制\n- 仅基于当前用户输入进行分析\n- `problem`\
+          \ 不超过30字\n- `domain` 为 0-5 之间的数字"
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        parameters:
+        - description: 提取用户的心理问题
+          name: problem
+          required: false
+          type: string
+        - description: 问题领域
+          name: domain
+          required: false
+          type: number
+        query:
+        - sys
+        - query
+        reasoning_mode: prompt
+        selected: false
+        title: 提取问题与领域
+        type: parameter-extractor
+        vision:
+          enabled: false
+      height: 87
+      id: '1786328877986'
+      position:
+        x: 616.2749130957708
+        y: 1717.1590887963546
+      positionAbsolute:
+        x: 616.2749130957708
+        y: 1717.1590887963546
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: '%Y-%m-%d %H:%M:%S'
+          form: form
+          human_description:
+            en_US: Time format in strftime standard.
+            ja_JP: Time format in strftime standard.
+            pt_BR: Time format in strftime standard.
+            zh_Hans: strftime 标准的时间格式。
+          label:
+            en_US: Format
+            ja_JP: Format
+            pt_BR: Format
+            zh_Hans: 格式
+          llm_description: null
+          max: null
+          min: null
+          name: format
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: UTC
+          form: form
+          human_description:
+            en_US: Timezone
+            ja_JP: Timezone
+            pt_BR: Timezone
+            zh_Hans: 时区
+          label:
+            en_US: Timezone
+            ja_JP: Timezone
+            pt_BR: Timezone
+            zh_Hans: 时区
+          llm_description: null
+          max: null
+          min: null
+          name: timezone
+          options:
+          - icon: null
+            label:
+              en_US: UTC
+              ja_JP: UTC
+              pt_BR: UTC
+              zh_Hans: UTC
+            value: UTC
+          - icon: null
+            label:
+              en_US: America/New_York
+              ja_JP: America/New_York
+              pt_BR: America/New_York
+              zh_Hans: 美洲/纽约
+            value: America/New_York
+          - icon: null
+            label:
+              en_US: America/Los_Angeles
+              ja_JP: America/Los_Angeles
+              pt_BR: America/Los_Angeles
+              zh_Hans: 美洲/洛杉矶
+            value: America/Los_Angeles
+          - icon: null
+            label:
+              en_US: America/Chicago
+              ja_JP: America/Chicago
+              pt_BR: America/Chicago
+              zh_Hans: 美洲/芝加哥
+            value: America/Chicago
+          - icon: null
+            label:
+              en_US: America/Sao_Paulo
+              ja_JP: America/Sao_Paulo
+              pt_BR: América/São Paulo
+              zh_Hans: 美洲/圣保罗
+            value: America/Sao_Paulo
+          - icon: null
+            label:
+              en_US: Asia/Shanghai
+              ja_JP: Asia/Shanghai
+              pt_BR: Asia/Shanghai
+              zh_Hans: 亚洲/上海
+            value: Asia/Shanghai
+          - icon: null
+            label:
+              en_US: Asia/Ho_Chi_Minh
+              ja_JP: Asia/Ho_Chi_Minh
+              pt_BR: Ásia/Ho Chi Minh
+              zh_Hans: 亚洲/胡志明市
+            value: Asia/Ho_Chi_Minh
+          - icon: null
+            label:
+              en_US: Asia/Tokyo
+              ja_JP: Asia/Tokyo
+              pt_BR: Asia/Tokyo
+              zh_Hans: 亚洲/东京
+            value: Asia/Tokyo
+          - icon: null
+            label:
+              en_US: Asia/Dubai
+              ja_JP: Asia/Dubai
+              pt_BR: Asia/Dubai
+              zh_Hans: 亚洲/迪拜
+            value: Asia/Dubai
+          - icon: null
+            label:
+              en_US: Asia/Kolkata
+              ja_JP: Asia/Kolkata
+              pt_BR: Asia/Kolkata
+              zh_Hans: 亚洲/加尔各答
+            value: Asia/Kolkata
+          - icon: null
+            label:
+              en_US: Asia/Seoul
+              ja_JP: Asia/Seoul
+              pt_BR: Asia/Seoul
+              zh_Hans: 亚洲/首尔
+            value: Asia/Seoul
+          - icon: null
+            label:
+              en_US: Asia/Singapore
+              ja_JP: Asia/Singapore
+              pt_BR: Asia/Singapore
+              zh_Hans: 亚洲/新加坡
+            value: Asia/Singapore
+          - icon: null
+            label:
+              en_US: Europe/London
+              ja_JP: Europe/London
+              pt_BR: Europe/London
+              zh_Hans: 欧洲/伦敦
+            value: Europe/London
+          - icon: null
+            label:
+              en_US: Europe/Berlin
+              ja_JP: Europe/Berlin
+              pt_BR: Europe/Berlin
+              zh_Hans: 欧洲/柏林
+            value: Europe/Berlin
+          - icon: null
+            label:
+              en_US: Europe/Moscow
+              ja_JP: Europe/Moscow
+              pt_BR: Europe/Moscow
+              zh_Hans: 欧洲/莫斯科
+            value: Europe/Moscow
+          - icon: null
+            label:
+              en_US: Australia/Sydney
+              ja_JP: Australia/Sydney
+              pt_BR: Australia/Sydney
+              zh_Hans: 澳大利亚/悉尼
+            value: Australia/Sydney
+          - icon: null
+            label:
+              en_US: Pacific/Auckland
+              ja_JP: Pacific/Auckland
+              pt_BR: Pacific/Auckland
+              zh_Hans: 太平洋/奥克兰
+            value: Pacific/Auckland
+          - icon: null
+            label:
+              en_US: Africa/Cairo
+              ja_JP: Africa/Cairo
+              pt_BR: Africa/Cairo
+              zh_Hans: 非洲/开罗
+            value: Africa/Cairo
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        params:
+          format: ''
+          timezone: ''
+        plugin_id: null
+        plugin_unique_identifier: ''
+        provider_icon: /console/api/workspaces/current/tool-provider/builtin/time/icon
+        provider_id: time
+        provider_name: time
+        provider_type: builtin
+        selected: false
+        title: 获取当前时间
+        tool_configurations:
+          format:
+            type: mixed
+            value: '%Y-%m-%d %H:%M:%S'
+          timezone:
+            type: constant
+            value: Asia/Shanghai
+        tool_description: 一个用于获取当前时间的工具。
+        tool_label: 获取当前时间
+        tool_name: current_time
+        tool_node_version: '2'
+        tool_parameters: {}
+        type: tool
+      height: 113
+      id: '1786331688416'
+      position:
+        x: 653.2238980663444
+        y: 2362.581992464081
+      positionAbsolute:
+        x: 653.2238980663444
+        y: 2362.581992464081
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: false
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: The SQL query string.
+            ja_JP: The SQL query string.
+            pt_BR: The SQL query string.
+            zh_Hans: SQL 查询语句。
+          label:
+            en_US: SQL Query
+            ja_JP: SQL Query
+            pt_BR: SQL Query
+            zh_Hans: SQL 查询语句
+          llm_description: The SQL query string.
+          max: null
+          min: null
+          name: query
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            ja_JP: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            pt_BR: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            zh_Hans: 选填，填写后将覆盖授权时填写的数据库连接。
+          label:
+            en_US: DB URI
+            ja_JP: DB URI
+            pt_BR: DB URI
+            zh_Hans: DB URI
+          llm_description: ''
+          max: null
+          min: null
+          name: db_uri
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: json
+          form: form
+          human_description:
+            en_US: Choose the output format.
+            ja_JP: Choose the output format.
+            pt_BR: Choose the output format.
+            zh_Hans: 选择输出格式。
+          label:
+            en_US: Output format
+            ja_JP: Output format
+            pt_BR: Output format
+            zh_Hans: 输出格式
+          llm_description: ''
+          max: null
+          min: null
+          name: format
+          options:
+          - icon: ''
+            label:
+              en_US: JSON
+              ja_JP: JSON
+              pt_BR: JSON
+              zh_Hans: JSON
+            value: json
+          - icon: ''
+            label:
+              en_US: CSV
+              ja_JP: CSV
+              pt_BR: CSV
+              zh_Hans: CSV
+            value: csv
+          - icon: ''
+            label:
+              en_US: YAML
+              ja_JP: YAML
+              pt_BR: YAML
+              zh_Hans: YAML
+            value: yaml
+          - icon: ''
+            label:
+              en_US: Markdown
+              ja_JP: Markdown
+              pt_BR: Markdown
+              zh_Hans: Markdown
+            value: md
+          - icon: ''
+            label:
+              en_US: Excel
+              ja_JP: Excel
+              pt_BR: Excel
+              zh_Hans: Excel
+            value: xlsx
+          - icon: ''
+            label:
+              en_US: HTML
+              ja_JP: HTML
+              pt_BR: HTML
+              zh_Hans: HTML
+            value: html
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            ja_JP: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            pt_BR: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            zh_Hans: '选填项。例如 {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              更多连接选项可参考 https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+          label:
+            en_US: DB Config Options
+            ja_JP: DB Config Options
+            pt_BR: DB Config Options
+            zh_Hans: 数据库连接配置选项
+          llm_description: ''
+          max: null
+          min: null
+          name: config_options
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        params:
+          config_options: ''
+          db_uri: ''
+          format: ''
+          query: ''
+        plugin_id: hjlarry/database
+        plugin_unique_identifier: hjlarry/database:0.0.6@534bc26cf5bc4ff6b5557457452287ccc71f00eef9378784c4f43ca49954ca2f
+        provider_icon: /console/api/workspaces/current/plugin/icon?tenant_id=fe50bf6a-ede5-4f1e-98b4-b500bed225ab&filename=65d2d7404efb4952bb715a35ae79ccce92e70b820fd6cdb74e9acc58a505f7cf.svg
+        provider_id: hjlarry/database/database
+        provider_name: hjlarry/database/database
+        provider_type: builtin
+        selected: false
+        title: SQL Execute2
+        tool_configurations:
+          config_options:
+            type: mixed
+            value: null
+          format:
+            type: constant
+            value: json
+        tool_description: 此工具用于在已存在的数据库中执行 SQL 查询。
+        tool_label: SQL Execute
+        tool_name: sql_execute
+        tool_node_version: '2'
+        tool_parameters:
+          db_uri:
+            type: mixed
+            value: null
+          query:
+            type: mixed
+            value: '{{#17863437143810.result#}}'
+        type: tool
+      height: 113
+      id: '17863437111880'
+      position:
+        x: 982.6733193497071
+        y: 2108.1432224798996
+      positionAbsolute:
+        x: 982.6733193497071
+        y: 2108.1432224798996
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 1002
+    - data:
+        code: "function main({args}) {\n    // 兼容多种输入格式\n    let sql = \"\";\n   \
+          \ if (Array.isArray(args) && args.length > 0) {\n        sql = args[0]?.sql\
+          \ ?? \"\";\n    } else if (args?.sql) {\n        sql = args.sql;\n    }\
+          \ else if (typeof args === \"string\") {\n        sql = args;\n    }\n \
+          \   return {\n        result: sql\n    };\n}\n"
+        code_language: javascript
+        desc: ''
+        isInIteration: false
+        isInLoop: false
+        outputs:
+          result:
+            children: null
+            type: string
+        selected: false
+        title: 格式转换3-1
+        type: code
+        variables:
+        - value_selector:
+          - '1786289924552'
+          - result
+          value_type: array[object]
+          variable: args
+      height: 51
+      id: '17863437143810'
+      position:
+        x: 982.6733193497071
+        y: 2037.382147860621
+      positionAbsolute:
+        x: 982.6733193497071
+        y: 2037.382147860621
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 1002
+    - data:
+        answer: 非常抱歉，你选的这位医师最近暂时没有排班，要不要看看其他的医师？
+        selected: false
+        title: 直接回复 12
+        type: answer
+        variables: []
+      height: 115
+      id: '1786345944582'
+      position:
+        x: 2162.9085001005587
+        y: 2240.589918680708
+      positionAbsolute:
+        x: 2162.9085001005587
+        y: 2240.589918680708
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - doctor
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - order_doctor
+        selected: false
+        title: 变量赋值 11
+        type: assigner
+        version: '2'
+      height: 109
+      id: '1786346172065'
+      position:
+        x: 2469.7411447907066
+        y: 2240.589918680708
+      positionAbsolute:
+        x: 2469.7411447907066
+        y: 2240.589918680708
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        items:
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - doctor
+        selected: false
+        title: 变量赋值 12
+        type: assigner
+        version: '2'
+      height: 83
+      id: '1786346772332'
+      position:
+        x: 2469.7411447907066
+        y: 2095.8076885242463
+      positionAbsolute:
+        x: 2469.7411447907066
+        y: 2095.8076885242463
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        model:
+          completion_params:
+            response_format: text
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: 6e02aa54-c493-4732-8d21-f981a6c50c71
+          role: system
+          text: "# 角色\n你是一位专业的时间安排助手，负责根据用户的预约记录和当前时间，筛选出可预约的时间段。\n\n# 任务\n给定以下信息：\n\
+            - **当前时间**：{{#1786331688416.text#}}（格式：`YYYY-MM-DD HH:MM:SS`）\n- **可预约起始日期**：{{#conversation.begin_time#}}\n\
+            - **可预约结束日期**：{{#conversation.end_time#}}\n- **已有预约时间段列表**：{{#conversation.ordered_time#}}（JSON数组字符串，元素格式为\
+            \ `\"YYYY-MM-DD HH:MM:SS\"`）\n\n请按照以下步骤执行：\n\n1. **解析当前时间**：提取当前日期（`YYYY-MM-DD`）和当前时间（`HH:MM:SS`）。\n\
+            2. **调整起始日期**：如果 `begin_time` 的日期早于当前日期，则将起始日期更新为当前日期。(此步骤为强制执行，不可跳过！)\n\
+            3. **生成候选日期列表**：从调整后的起始日期到 `end_time`（含两端）之间的所有日期。\n4. **为每个日期生成预设时间段**：默认四个时间段：`08:00:00`、`10:00:00`、`14:00:00`、`16:00:00`。\n\
+            \   - **特殊处理当天**：如果某个日期等于当前日期，则移除当前时间之前的时间段（即只保留晚于当前时间的时间段）。\n5. **移除已预约时间段**：将候选列表中的每个日期+时间组合与\
+            \ `orderedTime` 中的记录进行比对，若匹配则从列表中移除。\n6. **合并连续日期（此步骤为强制执行，不可跳过！）**：将剩余的可预约时间段按日期分组，若连续多天（日期连续）且可预约的时间段集合完全相同，则**必须**将它们合并为一个区间，格式为：`X月X日~X月X日：时间段列表`。不连续的日期单独列出。\n\
+            \n# 限制\n- 时间格式统一为 `HH:MM:SS`，日期格式统一为 `X月X日`（例如 `8月10日`）。\n- 若无可预约的时间段，输出：`当前暂无可用预约时段`。\n\
+            - 输出内容需按日期顺序排列（先早后晚）。\n- **关键约束**：若连续多天可预约时间段完全相同，必须合并为“X月X日~X月X日”的格式，严禁逐日单独列出！\n\
+            \n# 示例\n\n**示例输入**：\n- 当前时间：`2026-08-10 09:30:00`\n- `begin_time`：`2026-08-09`\n\
+            - `end_time`：`2026-09-15`\n- `orderedTime`：`[\"2026-08-10 10:00:00\",\
+            \ \"2026-08-11 14:00:00\"]`\n\n**处理过程**：\n1. 起始日期更新为当前日期：`2026-08-10`\n\
+            2. 候选日期：`2026-08-10` 至 `2026-09-15`\n3. 预设时间段：\n   - 8月10日：原为 `08:00,\
+            \ 10:00, 14:00, 16:00`，因当前时间09:30，移除08:00，保留 `10:00, 14:00, 16:00`；再移除已预约的10:00\
+            \ → 最终保留 `14:00, 16:00`\n   - 8月11日：四个时间段，移除已预约的14:00 → 最终 `08:00, 10:00,\
+            \ 16:00`\n   - 8月12日~9月15日：四个时间段均无预约 → `08:00, 10:00, 14:00, 16:00`\n\
+            4. 合并连续日期：8月12日~9月15日的时间段完全相同，合并为一个区间。\n\n**示例输出**：\n8月10日：14:00:00，16:00:00\n\
+            8月11日：08:00:00，10:00:00，16:00:00\n8月12日~9月15日：08:00:00，10:00:00，14:00:00，16:00:00\n\
+            \n**特别提醒**：请务必按照上述示例的格式执行合并操作。如果输出结果中出现了连续多天时间段完全相同但被逐日列出的情况，则视为未正确执行合并，请重新整理后再输出。"
+        selected: false
+        title: 筛选可预约的时间LLM
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786347324504'
+      position:
+        x: 997.47630968211
+        y: 2362.581992464081
+      positionAbsolute:
+        x: 997.47630968211
+        y: 2362.581992464081
+      selected: true
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: false
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: The SQL query string.
+            ja_JP: The SQL query string.
+            pt_BR: The SQL query string.
+            zh_Hans: SQL 查询语句。
+          label:
+            en_US: SQL Query
+            ja_JP: SQL Query
+            pt_BR: SQL Query
+            zh_Hans: SQL 查询语句
+          llm_description: The SQL query string.
+          max: null
+          min: null
+          name: query
+          options: []
+          placeholder: null
+          precision: null
+          required: true
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: null
+          form: llm
+          human_description:
+            en_US: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            ja_JP: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            pt_BR: Optional, Filling in this field will overwrite the database connection
+              entered during authorization.
+            zh_Hans: 选填，填写后将覆盖授权时填写的数据库连接。
+          label:
+            en_US: DB URI
+            ja_JP: DB URI
+            pt_BR: DB URI
+            zh_Hans: DB URI
+          llm_description: ''
+          max: null
+          min: null
+          name: db_uri
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: json
+          form: form
+          human_description:
+            en_US: Choose the output format.
+            ja_JP: Choose the output format.
+            pt_BR: Choose the output format.
+            zh_Hans: 选择输出格式。
+          label:
+            en_US: Output format
+            ja_JP: Output format
+            pt_BR: Output format
+            zh_Hans: 输出格式
+          llm_description: ''
+          max: null
+          min: null
+          name: format
+          options:
+          - icon: ''
+            label:
+              en_US: JSON
+              ja_JP: JSON
+              pt_BR: JSON
+              zh_Hans: JSON
+            value: json
+          - icon: ''
+            label:
+              en_US: CSV
+              ja_JP: CSV
+              pt_BR: CSV
+              zh_Hans: CSV
+            value: csv
+          - icon: ''
+            label:
+              en_US: YAML
+              ja_JP: YAML
+              pt_BR: YAML
+              zh_Hans: YAML
+            value: yaml
+          - icon: ''
+            label:
+              en_US: Markdown
+              ja_JP: Markdown
+              pt_BR: Markdown
+              zh_Hans: Markdown
+            value: md
+          - icon: ''
+            label:
+              en_US: Excel
+              ja_JP: Excel
+              pt_BR: Excel
+              zh_Hans: Excel
+            value: xlsx
+          - icon: ''
+            label:
+              en_US: HTML
+              ja_JP: HTML
+              pt_BR: HTML
+              zh_Hans: HTML
+            value: html
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        - auto_generate: null
+          default: null
+          form: form
+          human_description:
+            en_US: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            ja_JP: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            pt_BR: 'Optional. For example {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              More connection options can be found at https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+            zh_Hans: '选填项。例如 {"connect_args": {"ssl": {"ca": "/path/to/ca.pem"}}}
+
+              更多连接选项可参考 https://docs.sqlalchemy.org/en/20/core/engines.html#sqlalchemy.create_engine
+
+              '
+          label:
+            en_US: DB Config Options
+            ja_JP: DB Config Options
+            pt_BR: DB Config Options
+            zh_Hans: 数据库连接配置选项
+          llm_description: ''
+          max: null
+          min: null
+          name: config_options
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        params:
+          config_options: ''
+          db_uri: ''
+          format: ''
+          query: ''
+        plugin_id: hjlarry/database
+        plugin_unique_identifier: hjlarry/database:0.0.6@534bc26cf5bc4ff6b5557457452287ccc71f00eef9378784c4f43ca49954ca2f
+        provider_icon: /console/api/workspaces/current/plugin/icon?tenant_id=fe50bf6a-ede5-4f1e-98b4-b500bed225ab&filename=65d2d7404efb4952bb715a35ae79ccce92e70b820fd6cdb74e9acc58a505f7cf.svg
+        provider_id: hjlarry/database/database
+        provider_name: hjlarry/database/database
+        provider_type: builtin
+        selected: false
+        title: SQL Execute2
+        tool_configurations:
+          config_options:
+            type: mixed
+            value: null
+          format:
+            type: constant
+            value: json
+        tool_description: 此工具用于在已存在的数据库中执行 SQL 查询。
+        tool_label: SQL Execute
+        tool_name: sql_execute
+        tool_node_version: '2'
+        tool_parameters:
+          db_uri:
+            type: mixed
+            value: null
+          query:
+            type: mixed
+            value: '{{#1786290301879.result#}}'
+        type: tool
+      height: 113
+      id: '17863494419070'
+      position:
+        x: 2890.8374846469724
+        y: 248.5434828669533
+      positionAbsolute:
+        x: 2890.8374846469724
+        y: 248.5434828669533
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+      zIndex: 1002
+    - data:
+        is_team_authorization: true
+        paramSchemas:
+        - auto_generate: null
+          default: '%Y-%m-%d %H:%M:%S'
+          form: form
+          human_description:
+            en_US: Time format in strftime standard.
+            ja_JP: Time format in strftime standard.
+            pt_BR: Time format in strftime standard.
+            zh_Hans: strftime 标准的时间格式。
+          label:
+            en_US: Format
+            ja_JP: Format
+            pt_BR: Format
+            zh_Hans: 格式
+          llm_description: null
+          max: null
+          min: null
+          name: format
+          options: []
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: string
+        - auto_generate: null
+          default: UTC
+          form: form
+          human_description:
+            en_US: Timezone
+            ja_JP: Timezone
+            pt_BR: Timezone
+            zh_Hans: 时区
+          label:
+            en_US: Timezone
+            ja_JP: Timezone
+            pt_BR: Timezone
+            zh_Hans: 时区
+          llm_description: null
+          max: null
+          min: null
+          name: timezone
+          options:
+          - icon: null
+            label:
+              en_US: UTC
+              ja_JP: UTC
+              pt_BR: UTC
+              zh_Hans: UTC
+            value: UTC
+          - icon: null
+            label:
+              en_US: America/New_York
+              ja_JP: America/New_York
+              pt_BR: America/New_York
+              zh_Hans: 美洲/纽约
+            value: America/New_York
+          - icon: null
+            label:
+              en_US: America/Los_Angeles
+              ja_JP: America/Los_Angeles
+              pt_BR: America/Los_Angeles
+              zh_Hans: 美洲/洛杉矶
+            value: America/Los_Angeles
+          - icon: null
+            label:
+              en_US: America/Chicago
+              ja_JP: America/Chicago
+              pt_BR: America/Chicago
+              zh_Hans: 美洲/芝加哥
+            value: America/Chicago
+          - icon: null
+            label:
+              en_US: America/Sao_Paulo
+              ja_JP: America/Sao_Paulo
+              pt_BR: América/São Paulo
+              zh_Hans: 美洲/圣保罗
+            value: America/Sao_Paulo
+          - icon: null
+            label:
+              en_US: Asia/Shanghai
+              ja_JP: Asia/Shanghai
+              pt_BR: Asia/Shanghai
+              zh_Hans: 亚洲/上海
+            value: Asia/Shanghai
+          - icon: null
+            label:
+              en_US: Asia/Ho_Chi_Minh
+              ja_JP: Asia/Ho_Chi_Minh
+              pt_BR: Ásia/Ho Chi Minh
+              zh_Hans: 亚洲/胡志明市
+            value: Asia/Ho_Chi_Minh
+          - icon: null
+            label:
+              en_US: Asia/Tokyo
+              ja_JP: Asia/Tokyo
+              pt_BR: Asia/Tokyo
+              zh_Hans: 亚洲/东京
+            value: Asia/Tokyo
+          - icon: null
+            label:
+              en_US: Asia/Dubai
+              ja_JP: Asia/Dubai
+              pt_BR: Asia/Dubai
+              zh_Hans: 亚洲/迪拜
+            value: Asia/Dubai
+          - icon: null
+            label:
+              en_US: Asia/Kolkata
+              ja_JP: Asia/Kolkata
+              pt_BR: Asia/Kolkata
+              zh_Hans: 亚洲/加尔各答
+            value: Asia/Kolkata
+          - icon: null
+            label:
+              en_US: Asia/Seoul
+              ja_JP: Asia/Seoul
+              pt_BR: Asia/Seoul
+              zh_Hans: 亚洲/首尔
+            value: Asia/Seoul
+          - icon: null
+            label:
+              en_US: Asia/Singapore
+              ja_JP: Asia/Singapore
+              pt_BR: Asia/Singapore
+              zh_Hans: 亚洲/新加坡
+            value: Asia/Singapore
+          - icon: null
+            label:
+              en_US: Europe/London
+              ja_JP: Europe/London
+              pt_BR: Europe/London
+              zh_Hans: 欧洲/伦敦
+            value: Europe/London
+          - icon: null
+            label:
+              en_US: Europe/Berlin
+              ja_JP: Europe/Berlin
+              pt_BR: Europe/Berlin
+              zh_Hans: 欧洲/柏林
+            value: Europe/Berlin
+          - icon: null
+            label:
+              en_US: Europe/Moscow
+              ja_JP: Europe/Moscow
+              pt_BR: Europe/Moscow
+              zh_Hans: 欧洲/莫斯科
+            value: Europe/Moscow
+          - icon: null
+            label:
+              en_US: Australia/Sydney
+              ja_JP: Australia/Sydney
+              pt_BR: Australia/Sydney
+              zh_Hans: 澳大利亚/悉尼
+            value: Australia/Sydney
+          - icon: null
+            label:
+              en_US: Pacific/Auckland
+              ja_JP: Pacific/Auckland
+              pt_BR: Pacific/Auckland
+              zh_Hans: 太平洋/奥克兰
+            value: Pacific/Auckland
+          - icon: null
+            label:
+              en_US: Africa/Cairo
+              ja_JP: Africa/Cairo
+              pt_BR: Africa/Cairo
+              zh_Hans: 非洲/开罗
+            value: Africa/Cairo
+          placeholder: null
+          precision: null
+          required: false
+          scope: null
+          template: null
+          type: select
+        params:
+          format: ''
+          timezone: ''
+        plugin_id: null
+        plugin_unique_identifier: ''
+        provider_icon: /console/api/workspaces/current/tool-provider/builtin/time/icon
+        provider_id: time
+        provider_name: time
+        provider_type: builtin
+        selected: false
+        title: 获取当前时间
+        tool_configurations:
+          format:
+            type: mixed
+            value: '%Y-%m-%d %H:%M:%S'
+          timezone:
+            type: constant
+            value: Asia/Shanghai
+        tool_description: 一个用于获取当前时间的工具。
+        tool_label: 获取当前时间
+        tool_name: current_time
+        tool_node_version: '2'
+        tool_parameters: {}
+        type: tool
+      height: 113
+      id: '1786349974460'
+      position:
+        x: 1645.9003062105141
+        y: 240.57629460423175
+      positionAbsolute:
+        x: 1645.9003062105141
+        y: 240.57629460423175
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: 非常抱歉，我不是很明白你的意思，请给我一个预约时间吧，或者重新开始聊一聊？
+        selected: false
+        title: 直接回复 13
+        type: answer
+        variables: []
+      height: 131
+      id: '1786431276056'
+      position:
+        x: 2249.722660870294
+        y: 443.03184934798514
+      positionAbsolute:
+        x: 2249.722660870294
+        y: 443.03184934798514
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        desc: ''
+        isInIteration: false
+        isInLoop: false
+        items:
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - is_order_time
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - money
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - doctor
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - problem
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - domain
+        - input_type: constant
+          operation: set
+          value: 1
+          variable_selector:
+          - conversation
+          - round
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - order_doctor
+        - input_type: constant
+          operation: set
+          value: 0
+          variable_selector:
+          - conversation
+          - doctor_id
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - ordered_time
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - end_time
+        - input_type: variable
+          operation: clear
+          value: []
+          variable_selector:
+          - conversation
+          - begin_time
+        selected: false
+        title: 变量重置 (1)
+        type: assigner
+        version: '2'
+      height: 343
+      id: '17864314158930'
+      position:
+        x: 3567.4348868906304
+        y: 248.5434828669533
+      positionAbsolute:
+        x: 3567.4348868906304
+        y: 248.5434828669533
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        context:
+          enabled: false
+          variable_selector: []
+        memory:
+          query_prompt_template: '{{#sys.query#}}'
+          role_prefix:
+            assistant: ''
+            user: ''
+          window:
+            enabled: false
+            size: 50
+        model:
+          completion_params:
+            temperature: 0.7
+            thinking: false
+          mode: chat
+          name: deepseek-v4-flash
+          provider: langgenius/deepseek/deepseek
+        prompt_template:
+        - id: f1c602e5-bfcd-4d77-ad43-f78e1b7741f6
+          role: system
+          text: 你是一个高级心理学家,你需要用温柔可爱的语气回答用户提出的心理学问题,你可以在用户提问第两三轮的时候推荐他来预约一个医师深度聊一聊
+        - id: 5c165f1e-fa77-4aeb-b3af-0b4bf27db9ef
+          role: user
+          text: '{{#sys.query#}}'
+        selected: false
+        title: 心理知识llm
+        type: llm
+        vision:
+          enabled: false
+      height: 87
+      id: '1786967311196'
+      position:
+        x: 959.9009603281397
+        y: 622.8568408469599
+      positionAbsolute:
+        x: 959.9009603281397
+        y: 622.8568408469599
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    - data:
+        answer: '{{#1786967311196.text#}}'
+        selected: false
+        title: 直接回复 14
+        type: answer
+        variables: []
+      height: 102
+      id: '1786967404120'
+      position:
+        x: 1247.1165800681752
+        y: 478.5890293120691
+      positionAbsolute:
+        x: 1247.1165800681752
+        y: 478.5890293120691
+      selected: false
+      sourcePosition: right
+      targetPosition: left
+      type: custom
+      width: 241
+    viewport:
+      x: 172.26860799206918
+      y: -8.751279228839849
+      zoom: 0.32987697769322366
+  rag_pipeline_variables: []

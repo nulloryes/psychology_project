@@ -2,7 +2,6 @@ package com.cykj.service;
 
 import com.cykj.enity.DO.UserDO;
 import com.cykj.enity.dto.ResponseDTO;
-import com.cykj.enity.vo.PageResult;
 import com.cykj.enity.vo.UserVO;
 import com.github.pagehelper.PageInfo;
 
@@ -10,7 +9,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public interface UserService {
-    UserVO login(UserVO studentVO, HttpSession session);
+    ResponseDTO login(UserVO studentVO, HttpSession httpSession);
 
     PageInfo<UserVO> SelectAllUser(UserDO userDO);
 

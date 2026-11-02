@@ -37,16 +37,19 @@
         <property name="suffix" value=".html"/>
     </bean>
 
-<!--    &lt;!&ndash;    验证码配置&ndash;&gt;-->
-<!--    <mvc:interceptors>-->
-<!--        <mvc:interceptor>-->
-<!--            &lt;!&ndash;        拦截所有请求&ndash;&gt;-->
-<!--            <mvc:mapping path="/**"/>-->
-<!--            &lt;!&ndash;        类似白名单&ndash;&gt;-->
-<!--            <mvc:exclude-mapping path="/user/login"/>-->
-<!--            <mvc:exclude-mapping path="/code/getCode"/>-->
-<!--            &lt;!&ndash;        拦截器的类&ndash;&gt;-->
-<!--            <bean class="com.cykj.interceptor.TokenInterceptor"/>-->
-<!--        </mvc:interceptor>-->
-<!--    </mvc:interceptors>-->
+    <!--    验证码配置-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <!--        拦截所有请求-->
+            <mvc:mapping path="/**"/>
+            <!--        类似白名单-->
+            <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/enroll"/>
+            <mvc:exclude-mapping path="/admin/login"/>
+            <mvc:exclude-mapping path="/admin/insertAdmin"/>
+            <mvc:exclude-mapping path="/code/getCode"/>
+            <!--        拦截器的类-->
+            <bean class="com.cykj.interceptor.TokenInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

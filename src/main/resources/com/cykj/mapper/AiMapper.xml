@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.AiMapper">
+    <insert id="insertAi">
+        insert into ai_dify (dify_number, dify_local, remarks, create_time)
+        values (#{difyNumber}, #{difyLocal}, #{remarks}, #{createTime})
+    </insert>
+    <update id="updateAi">
+        update ai_dify
+        set dify_number = #{difyNumber}, dify_local = #{difyLocal}, remarks = #{remarks}, update_time = #{updateTime}
+        where ai_id = #{id}
+    </update>
+    <update id="enableAi">
+        update ai_dify set status = #{status}
+        where ai_id = #{id}
+    </update>
+    <update id="deleteAi">
+        update ai_dify
+        set status = 1, update_time = #{ut}
+        where ai_id = #{id}
+    </update>
+    <select id="selectAi" resultType="com.cykj.enity.vo.AiDifyVO">
+        select * from ai_dify
+        where status != 1
+    </select>
+    <select id="selectAiByStatus" resultType="com.cykj.enity.vo.AiDifyVO">
+        select * from ai_dify
+        where status = 2
+    </select>
+</mapper>

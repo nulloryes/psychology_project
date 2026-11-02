@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cykj.mapper.UserMapper">
     <insert id="insertUser">
-        insert into user (account,password,name,sex,age,phone,address,create_time)
+        insert into user (account,password,name,sex,age,phone,create_time)
         values (#{userVO.account},#{userVO.password},#{userVO.name},#{userVO.sex},
-                #{userVO.age},#{userVO.phone},#{userVO.address},#{userVO.createTime})
+                #{userVO.age},#{userVO.phone},#{userVO.createTime})
     </insert>
     <update id="updateUser">
         update user
@@ -29,12 +29,16 @@
             <if test="userVO.address!=null">
                 address = #{userVO.address},
             </if>
-            <if test="userVO.money!=null">
+            <if test="userVO.money!=null and userVO.money!=0.0">
                 money = #{userVO.money},
+            </if>
+            <if test="userVO.avatar!=null">
+                avatar = #{userVO.avatar},
             </if>
             <if test="userVO.status!=null">
                 status = #{userVO.status},
             </if>
+
         </set>
         where user_id = #{userVO.userId}
     </update>
@@ -61,7 +65,7 @@
             </if>
         </where>
     </select>
-    <select id="selectAllUserById" resultType="com.cykj.enity.vo.UserVO">
+    <select id="selectUserById" resultType="com.cykj.enity.vo.UserVO">
         select * from user
         where user_id = #{useId}
     </select>

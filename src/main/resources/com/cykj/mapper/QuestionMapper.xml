@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.QuestionMapper">
+    
+    <resultMap id="queryReport" type="com.cykj.enity.vo.EvaluationVO">
+        <result property="evaluationId" column="evaluation_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="domainId" column="domain_id"/>
+        <result property="tip" column="tip"/>
+        <result property="domainName" column="domainName"/>
+        <result property="money" column="money"/>
+        <result property="score" column="score"/>
+        <result property="name" column="name"/>
+        <result property="sex" column="sex"/>
+        <result property="age" column="age"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <collection property="report" ofType="com.cykj.enity.vo.EvaluationReportVO">
+            <result property="reportId" column="report_id"/>
+            <result property="consultantId" column="consultant_id"/>
+            <result property="result" column="result"/>
+            <result property="consultantName" column="consultantName"/>
+            <result property="role" column="role"/>
+        </collection>
+    </resultMap>
+    
+    <insert id="insertQuestion">
+        insert into question (domain_id,question,AQ,`AS`,BQ,BS,CQ,CS,DQ,DS,create_time)
+        values (#{questionVO.domainId},#{questionVO.question},#{questionVO.aq},#{questionVO.as},
+                #{questionVO.bq},#{questionVO.bs},#{questionVO.cq},#{questionVO.cs},#{questionVO.dq},
+                #{questionVO.ds},#{questionVO.createTime})
+    </insert>
+    <insert id="answerReport">
+        insert into evaluation_report (result,consultant_id,evaluation_id,create_time)
+        values (#{evaluationReportVO.result},#{evaluationReportVO.consultantId},
+                #{evaluationReportVO.evaluationId},#{evaluationReportVO.createTime})
+    </insert>
+    <insert id="insertEvaluation">
+        insert into evaluation (user_id,domain_id,tip,money,score,create_time)
+        values (#{evaluationVO.userId},#{evaluationVO.domainId},#{evaluationVO.tip},#{evaluationVO.money},
+                #{evaluationVO.score},#{evaluationVO.createTime})
+    </insert>
+    <update id="updateQuestion">
+        update question q
+        <set>
+            <if test="questionVO.domainId!=null">
+                domain_id = #{questionVO.domainId},
+            </if>
+            <if test="questionVO.question!=null">
+                question = #{questionVO.question},
+            </if>
+            <if test="questionVO.aq!=null">
+                AQ = #{questionVO.aq},
+            </if>
+            <if test="questionVO.as!=null">
+                q.AS = #{questionVO.as},
+            </if>
+            <if test="questionVO.bq!=null">
+                BQ = #{questionVO.bq},
+            </if>
+            <if test="questionVO.bs!=null">
+                BS = #{questionVO.bs},
+            </if>
+            <if test="questionVO.cq!=null">
+                CQ = #{questionVO.cq},
+            </if>
+            <if test="questionVO.cs!=null">
+                CS = #{questionVO.cs},
+            </if>
+            <if test="questionVO.dq!=null">
+                DQ = #{questionVO.dq},
+            </if>
+            <if test="questionVO.ds!=null">
+                DS = #{questionVO.ds},
+            </if>
+            <if test="questionVO.status!=null">
+                status = #{questionVO.status}
+            </if>
+        </set>
+        where question_id = #{questionVO.questionId}
+    </update>
+    <update id="deleteQuestion">
+        update question
+        set status = 1
+        where question_id = #{id}
+    </update>
+    <delete id="delEvaluationReport">
+        delete from evaluation_report
+        where report_id = #{reportId}
+    </delete>
+    <update id="updateEvaluationStatus">
+        update evaluation
+        set status = 1
+        where evaluation_id = #{evaluationId}
+    </update>
+    <select id="selectQuestion" resultType="com.cykj.enity.vo.QuestionVO">
+        select * from question
+        <where>
+            status = 0
+            <if test="questionDO.domainId!=null">
+               and domain_id = #{questionDO.domainId}
+            </if>
+            <if test="questionDO.question!=null">
+                and question like concat('%',#{questionDO.question},'%')
+            </if>
+            <if test="questionDO.questionId!=null">
+                and question_id = #{questionDO.questionId}
+            </if>
+        </where>
+    </select>
+    <select id="selectEvaluation" resultMap="queryReport">
+        select e.*,u.*,d.name as domainName,er.*,c.role,a.name as consultantName
+        from evaluation e
+        left join user u on e.user_id = u.user_id
+        left join domain d on e.domain_id = d.domain_id
+        left join evaluation_report er on e.evaluation_id = er.evaluation_id
+        left join consultant c on er.consultant_id = c.consultant_id
+        left join hou_admin a on c.admin_id = a.admin_id
+        <where>
+            u.is_delete = 0
+            <if test="evaluationDO.userName!=null">
+               and u.name like concat('%',#{evaluationDO.userName},'%')
+            </if>
+            <if test="evaluationDO.status!=null">
+                and e.status = #{evaluationDO.status}
+            </if>
+            <if test="evaluationDO.domainId!=null">
+               and e.domain_id = #{evaluationDO.domainId}
+            </if>
+            <if test="evaluationDO.consultantId!=null">
+               and er.consultant_id = #{evaluationDO.consultantId}
+            </if>
+            <if test="evaluationDO.userId!=null">
+                and e.user_id = #{evaluationDO.userId}
+            </if>
+        </where>
+    </select>
+    <select id="selectEvaluationById" resultType="com.cykj.enity.vo.EvaluationVO">
+        select e.*,u.*,d.name as domainName,er.*,c.role,a.name as consultantName
+        from evaluation e
+                 left join user u on e.user_id = u.user_id
+                 left join domain d on e.domain_id = d.domain_id
+                 left join evaluation_report er on e.evaluation_id = er.evaluation_id
+                 left join consultant c on er.consultant_id = c.consultant_id
+                 left join hou_admin a on c.admin_id = a.admin_id
+        where e.evaluation_id = #{id}
+    </select>
+
+</mapper>

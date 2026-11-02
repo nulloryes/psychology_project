@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.RiverMapper">
+    <insert id="insertRiver">
+        insert into money_flow (tip,user_id,consultant_id,type,money,create_time,status)
+        values (#{moneyFlowVO.tip},#{moneyFlowVO.userId},#{moneyFlowVO.consultantId},#{moneyFlowVO.type},
+                #{moneyFlowVO.money},#{moneyFlowVO.createTime},#{moneyFlowVO.status})
+    </insert>
+    <update id="insertMoney">
+        update user
+        set money = #{moneyFlowVO.money}
+        where user_id = #{moneyFlowVO.userId}
+    </update>
+    <update id="updateRiver">
+        update money_flow
+        set status = 1,type = #{moneyFlowVO.type}
+        where money_flow_id = #{moneyFlowVO.moneyFlowId}
+    </update>
+    <select id="selectRiver" resultType="com.cykj.enity.vo.MoneyFlowVO">
+        select mf.*,c.*,ha.name from money_flow mf
+        left join consultant c on mf.consultant_id = c.consultant_id
+        left join hou_admin ha on c.admin_id = ha.admin_id
+        <where>
+            <if test="moneyFlowDO.tip!=null">
+                mf.tip like concat('%',#{moneyFlowDO.tip},'%')
+            </if>
+            <if test="moneyFlowDO.consultantName!=null">
+                and ha.name like concat('%',#{moneyFlowDO.consultantName},'%')
+            </if>
+            <if test="moneyFlowDO.consultantRole!=null">
+                and c.role = #{moneyFlowDO.consultantRole}
+            </if>
+            <if test="moneyFlowDO.type!=null">
+                and mf.type = #{moneyFlowDO.type}
+            </if>
+            <if test="moneyFlowDO.status!=null">
+                and mf.status = #{moneyFlowDO.status}
+            </if>
+        </where>
+    </select>
+    <select id="selectRiverByUserId" resultType="com.cykj.enity.vo.MoneyFlowVO">
+        select mf.*,c.role,ha.name from money_flow mf
+        left join consultant c on mf.consultant_id = c.consultant_id
+        left join hou_admin ha on c.admin_id = ha.admin_id
+        where mf.user_id = #{userId}
+    </select>
+</mapper>

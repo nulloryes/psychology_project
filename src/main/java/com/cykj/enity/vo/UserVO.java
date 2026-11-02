@@ -9,18 +9,21 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserVO{
-  private long userId;
+  private Integer userId;
   private String account;
   private String password;
   private String name;
   private String sex;
-  private long age;
+  private Integer age;
+  private String avatar;
   private String phone;
   private String address;
-  private long status;
-  private long isDelete;
+  private Integer status;
+  private Integer isDelete;
   private double money;
   private Timestamp createTime;
   private Timestamp updateTime;
 
+  private String code;
+  private String unique;
 }

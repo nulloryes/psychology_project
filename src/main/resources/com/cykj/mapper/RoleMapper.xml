@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.RoleMapper">
+    <update id="updateRole">
+        update hou_role r
+        <set>
+            <if test="roleVO.name!=null">
+                r.name = #{roleVO.name},
+            </if>
+            <if test="roleVO.desc!=null">
+                r.desc = #{roleVO.desc},
+            </if>
+            <if test="roleVO.status!=null">
+                r.status = #{roleVO.status}
+            </if>
+        </set>
+        where role_id = #{roleVO.roleId}
+    </update>
+    <update id="delRole">
+        update hou_role
+        set status = 1
+        where role_id = #{id}
+    </update>
+    <insert id="insertRole">
+        insert into hou_role (`name`,`desc`,`create_time`)
+        values (#{roleVO.name},#{roleVO.desc},#{roleVO.createTime})
+    </insert>
+    <insert id="insertRoleMenu">
+        insert into role_menu (menu_id,role_id,create_time)
+        values (#{roleMenuVO.menuId},#{roleMenuVO.roleId},#{roleMenuVO.createTime})
+    </insert>
+    <delete id="delRoleMenu">
+        delete from role_menu
+        where role_id = #{roleMenuVO.roleId} and menu_id = #{roleMenuVO.menuId}
+    </delete>
+    <delete id="delRoleMenuById">
+        delete from role_menu
+        where role_id = #{id}
+    </delete>
+    <select id="allRole" resultType="com.cykj.enity.vo.RoleVO">
+        select * from hou_role
+        <where>
+            status = 0
+            <if test="roleVO.roleId!=null">
+                and role_id = #{roleVO.roleId}
+            </if>
+            <if test="roleVO.name!=null">
+                and name like concat('%',#{roleVO.name},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectRoleMenu" resultType="com.cykj.enity.vo.RoleMenuVO">
+        select rm.*,m.* from role_menu rm
+        left join menu m on rm.menu_id = m.menu_id
+        where rm.role_id = #{id} and m.status = 0
+        order by m.up_id,m.order asc
+    </select>
+    <select id="selectMenus" resultType="com.cykj.enity.vo.MenuVO">
+        select m.* from role_menu rm
+        left join menu m on rm.menu_id = m.menu_id
+        where rm.role_id = #{id} and m.status = 0
+        order by m.up_id,m.order asc
+    </select>
+</mapper>

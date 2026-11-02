@@ -19,6 +19,6 @@ public interface UserMapper {
 
     Integer deleteUser(@Param("useId") Integer useId);
 
-    UserVO selectAllUserById(@Param("useId") Integer useId);
+    UserVO selectUserById(@Param("useId") Integer useId);
 
 }

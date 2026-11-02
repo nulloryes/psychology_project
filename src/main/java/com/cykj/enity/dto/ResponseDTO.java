@@ -30,4 +30,7 @@ public class ResponseDTO {
     public static ResponseDTO fail(String msg){
         return new ResponseDTO(FAIL, msg, null);
     }
+    public static ResponseDTO fail(Integer code,String msg){
+        return new ResponseDTO(code, msg, null);
+    }
 }

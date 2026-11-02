@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.ConsultationMapper">
+    <insert id="insertConsultation">
+        insert into reservation
+        (user_id,domain_id,consultant_id,money,order_time,problem,create_time)
+        values (#{reservationVO.userId},#{reservationVO.domainId},#{reservationVO.consultantId},
+                #{reservationVO.money},#{reservationVO.orderTime},#{reservationVO.problem},#{reservationVO.createTime})
+    </insert>
+    <update id="updateConsultation">
+        update reservation
+        <set>
+            <if test="reservationVO.status!=null">
+                status = #{reservationVO.status},
+            </if>
+            <if test="reservationVO.money!=null and reservationVO.money!=0.0">
+                money = #{reservationVO.money},
+            </if>
+            <if test="reservationVO.orderTime!=null">
+                order_time = #{reservationVO.orderTime},
+            </if>
+            <if test="reservationVO.problem!=null">
+                problem = #{reservationVO.problem},
+            </if>
+            <if test="reservationVO.answer!=null">
+                answer = #{reservationVO.answer},
+            </if>
+            <if test="reservationVO.rate!=null">
+                rate = #{reservationVO.rate},
+            </if>
+            <if test="reservationVO.rateScore!=null">
+                rate_score = #{reservationVO.rateScore},
+            </if>
+            <if test="reservationVO.rateTime!=null">
+                rate_time = #{reservationVO.rateTime}
+            </if>
+        </set>
+        where reservation_id = #{reservationVO.reservationId}
+    </update>
+    <update id="updateScheduling">
+        update scheduling
+        <set>
+            <if test="schedulingVO.beginTime!=null">
+                begin_time = #{schedulingVO.beginTime},
+            </if>
+            <if test="schedulingVO.endTime!=null">
+                end_time = #{schedulingVO.endTime},
+            </if>
+            <if test="schedulingVO.status!=null">
+                status = #{schedulingVO.status},
+            </if>
+        </set>
+        where scheduling_id = #{schedulingVO.schedulingId}
+    </update>
+    <update id="deleteScheduling">
+        update scheduling
+        set status = 1
+        where consultant_id = #{consultantId}
+    </update>
+    <update id="deleteConsultation">
+        update reservation
+        set status = 3
+        where reservation_id = #{reservationId}
+    </update>
+    <select id="getAllConsultation" resultType="com.cykj.enity.vo.ReservationVO">
+        select r.*,u.name as userName,c.role,ha.name as consultantName,d.name as domainName
+        from reservation r
+        left join domain d on r.domain_id = d.domain_id
+        left join user u on r.user_id = u.user_id
+        left join consultant c on r.consultant_id = c.consultant_id
+        left join hou_admin ha on c.admin_id = ha.admin_id
+        <where>
+            <if test="reservationDO.userId!=null">
+                r.user_id = #{reservationDO.userId}
+            </if>
+            <if test="reservationDO.consultantId!=null">
+                r.consultant_id = #{reservationDO.consultantId}
+            </if>
+            <if test="reservationDO.adminId!=null">
+                ha.admin_id = #{reservationDO.adminId}
+            </if>
+            <if test="reservationDO.userName!=null">
+               and u.name like concat('%',#{reservationDO.userName},'%')
+            </if>
+            <if test="reservationDO.domainId!=null">
+               and r.domain_id = #{reservationDO.domainId}
+            </if>
+            <if test="reservationDO.consultantName!=null">
+               and ha.name like concat('%',#{reservationDO.consultantName},'%')
+            </if>
+            <if test="reservationDO.status!=null">
+               and r.status = #{reservationDO.status}
+            </if>
+            <if test="reservationDO.orderTime!=null">
+                and r.orderTime = #{reservationDO.orderTime}
+            </if>
+            <if test="reservationDO.startDate!=null and reservationDO.endDate!=null" >
+               and r.create_time between #{reservationDO.startDate} and #{reservationDO.endDate}
+            </if>
+            <if test="reservationDO.problem!=null">
+               and r.problem like concat('%',#{reservationDO.problem},'%')
+            </if>
+        </where>
+    </select>
+    <select id="getConsultationById" resultType="com.cykj.enity.vo.ReservationVO">
+        select r.*,u.name as userName,c.role,ha.name as consultantName,d.name as domainName
+        from reservation r
+        left join domain d on r.domain_id = d.domain_id
+        left join user u on r.user_id = u.user_id
+        left join consultant c on r.consultant_id = c.consultant_id
+        left join hou_admin ha on c.admin_id = ha.admin_id
+        where reservation_id = #{reservationId}
+    </select>
+    <select id="selectReserved" resultType="com.cykj.enity.vo.list.reservedVO">
+        select order_time from reservation
+        where consultant_id = #{consultantId} and status = 1
+           or consultant_id = #{consultantId} and status = 2
+    </select>
+    <select id="getAvgRateScore" resultType="java.lang.Double">
+        select avg(cast(rate_score as decimal)) from reservation
+        where consultant_id = #{consultantId} and rate_score is not null
+    </select>
+    <select id="selectScheduling" resultType="com.cykj.enity.vo.SchedulingVO">
+        select * from scheduling
+        where consultant_id = #{consultantId} and status = 0
+    </select>
+
+</mapper>

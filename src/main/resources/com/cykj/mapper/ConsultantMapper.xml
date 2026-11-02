@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.ConsultantMapper">
+
+    <resultMap id="queryConsultant" type="com.cykj.enity.vo.ConsultantVO">
+        <result property="name" column="name"/>
+        <result property="school" column="school"/>
+        <result property="account" column="account"/>
+        <result property="password" column="password"/>
+        <result property="status" column="status"/>
+        <result property="rateScore" column="rate_score"/>
+        <result property="money" column="money"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="createTime" column="create_time"/>
+        <result property="role" column="role"/>
+        <result property="project" column="project"/>
+        <result property="profile" column="profile"/>
+        <result property="price" column="price"/>
+        <result property="adminId" column="admin_id"/>
+        <result property="consultantId" column="consultant_id"/>
+        <result property="headPicture" column="head_picture"/>
+        <collection property="domain" ofType="com.cykj.enity.vo.DomainVO">
+            <result property="domainId" column="domain_id"/>
+            <result property="name" column="domain_name"/>
+        </collection>
+    </resultMap>
+
+    <insert id="insertScheduling">
+        insert into scheduling (consultant_id,begin_time,end_time,create_time)
+        values (#{schedulingVO.consultantId},#{schedulingVO.beginTime},#{schedulingVO.endTime},#{schedulingVO.createTime})
+    </insert>
+    <insert id="insertDomain">
+        insert into consultant_domain (consultant_id,domain_id,create_time)
+        values (#{consultantId},#{domainId},#{time})
+    </insert>
+    <update id="updateConsultant">
+        update consultant co
+        <set>
+            <if test="consultantVO.school!=null">
+                school = #{consultantVO.school},
+            </if>
+            <if test="consultantVO.role!=null">
+                co.role = #{consultantVO.role},
+            </if>
+            <if test="consultantVO.project!=null">
+                project = #{consultantVO.project},
+            </if>
+            <if test="consultantVO.profile!=null">
+                profile = #{consultantVO.profile},
+            </if>
+            <if test="consultantVO.price!=null and consultantVO.price!=0.0">
+                price = #{consultantVO.price},
+            </if>
+            <if test="consultantVO.headPicture!=null">
+                head_picture = #{consultantVO.headPicture},
+            </if>
+        </set>
+        where consultant_id = #{consultantVO.consultantId}
+    </update>
+    <update id="reviewConsultation">
+        update reservation
+        set status = 1
+        where reservation_id = #{reservationId}
+    </update>
+    <delete id="delDomain">
+        delete from consultant_domain
+        where consultant_id = #{consultantId} and domain_id = #{domainId}
+    </delete>
+    <delete id="deleteConsultant">
+        delete from consultant
+        where consultant_id = #{consultantId}
+    </delete>
+    <update id="updateRateScore">
+        update consultant set rate_score = #{rateScore} where consultant_id = #{consultantId}
+    </update>
+    <delete id="deleteDomain">
+        delete from consultant_domain
+        where consultant_id = #{consultantId}
+    </delete>
+
+    <select id="selectAllConsultant" resultMap="queryConsultant">
+        select c.*,ha.*,d.name as domain_name,d.domain_id from consultant c
+        left join hou_admin ha on c.admin_id = ha.admin_id
+        left join consultant_domain cd on c.consultant_id = cd.consultant_id
+        left join domain d on cd.domain_id = d.domain_id
+        <where>
+            ha.is_delete = 0
+            <if test="consultantDO.status==null">
+               and ha.status = 0
+            </if>
+            <if test="consultantDO.status!=null">
+                and ha.status = #{consultantDO.status}
+            </if>
+            <if test="consultantDO.name!=null">
+               and ha.name like concat('%',#{consultantDO.name},'%')
+            </if>
+            <if test="consultantDO.role!=null and consultantDO.role!=''">
+               and c.role = #{consultantDO.role}
+            </if>
+            <if test="consultantDO.price!=null and consultantDO.price!=0.0">
+               and c.price &lt; #{consultantDO.price}
+            </if>
+            <if test="consultantDO.domainId!=null and consultantDO.domainId!=0">
+               and cd.domain_id = #{consultantDO.domainId}
+            </if>
+            <if test="consultantDO.adminId!=null">
+                and c.admin_id = #{consultantDO.adminId}
+            </if>
+        </where>
+    </select>
+    <select id="selectConsultantById" resultMap="queryConsultant">
+        select c.*,ha.*,d.name as domain_name,d.domain_id from consultant c
+        left join hou_admin ha on c.admin_id = ha.admin_id
+        left join consultant_domain cd on c.consultant_id = cd.consultant_id
+        left join domain d on cd.domain_id = d.domain_id
+        where c.consultant_id = #{consultantId} and is_delete = 0
+    </select>
+    <select id="selectDomain" resultType="com.cykj.enity.vo.DomainVO">
+        select * from domain d
+        left join consultant_domain cd on d.domain_id = cd.domain_id
+        where cd.consultant_id = #{consultantId} and d.status = 0
+    </select>
+</mapper>

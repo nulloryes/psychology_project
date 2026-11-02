@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.DomainMapper">
+    <insert id="insertDomain">
+        insert into domain (name,create_time)
+        values (#{domainVO.name},#{domainVO.createTime})
+    </insert>
+    <update id="updateDomain">
+        update domain
+        <set>
+            <if test="domainVO.name!=null">
+                name = #{domainVO.name},
+            </if>
+            <if test="domainVO.status!=null">
+                status = #{domainVO.status}
+            </if>
+        </set>
+        where domain_id = #{domainVO.domainId}
+    </update>
+    <update id="delDomain">
+        update domain
+        set status = 1
+        where domain_id = #{domainVO.domainId}
+    </update>
+    <select id="selectDomain" resultType="com.cykj.enity.vo.DomainVO">
+        select * from domain d
+        <where>
+            status = 0
+            <if test="domainDO.domainId!=null">
+               and domain_id = #{domainDO.domainId}
+            </if>
+            <if test="domainDO.name!=null">
+               and d.name like concat('%',#{domainDO.name},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

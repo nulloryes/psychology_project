@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.SystemMapper">
+
+    <insert id="insertLog">
+        insert into hou_log (type,remark,create_time)
+        values (#{logVO.type},#{logVO.remark},#{logVO.createTime})
+    </insert>
+    <insert id="insertMenu">
+        insert into menu (name,up_id,order,create_time)
+        values (#{menuVO.name},#{menuVO.upId},#{menuVO.order},#{menuVO.createTime})
+    </insert>
+    <update id="updateMenu">
+        update menu
+        <set>
+            <if test="menuVO.name!=null">
+                name = #{menuVO.name},
+            </if>
+            <if test="menuVO.upId!=null">
+                up_id = #{menuVO.upId},
+            </if>
+            <if test="menuVO.order!=null">
+                menu.order = #{menuVO.order},
+            </if>
+            <if test="menuVO.status!=null">
+                status = #{menuVO.status}
+            </if>
+        </set>
+        where menu_id = #{menuVO.menuId}
+    </update>
+    <update id="menuStatus">
+        update menu
+        set status = #{status}
+        where menu_id = #{id}
+    </update>
+    <select id="selectLog" resultType="com.cykj.enity.vo.LogVO">
+        select * from hou_log l
+        <where>
+            <if test="logVO.type!=null">
+               and l.type = #{logVO.type}
+            </if>
+            <if test="logVO.startDate!=null and logVO.endDate!=null">
+                and l.create_time between #{logVO.startDate} and #{logVO.endDate}
+            </if>
+        </where>
+    </select>
+    <select id="getMenu" resultType="com.cykj.enity.vo.MenuVO">
+        select * from menu
+        where status = 0
+        order by menu.order asc
+    </select>
+    <select id="selectMenu" resultType="com.cykj.enity.vo.MenuVO">
+        select * from menu
+    </select>
+</mapper>

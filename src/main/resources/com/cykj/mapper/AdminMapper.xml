@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cykj.mapper.AdminMapper">
+    <insert id="insertAdmin">
+        insert into hou_admin (account,password,name,role_id,create_time)
+        values (#{adminVO.account},#{adminVO.password},#{adminVO.name},2,#{adminVO.createTime})
+    </insert>
+    <insert id="insertConsultant">
+        insert into consultant (school,role,project,profile,price,admin_id,head_picture,create_time)
+        values (#{consultantVO.school},#{consultantVO.role},#{consultantVO.project},#{consultantVO.profile},
+                #{consultantVO.price},#{consultantVO.adminId},#{consultantVO.headPicture},#{consultantVO.createTime})
+    </insert>
+    <update id="updateAdmin">
+        update hou_admin ha
+        <set>
+            <if test="adminVO.password!=null">
+                password = #{adminVO.password},
+            </if>
+            <if test="adminVO.name!=null">
+                ha.name = #{adminVO.name},
+            </if>
+            <if test="adminVO.status!=null">
+                status = #{adminVO.status},
+            </if>
+            <if test="adminVO.money!=null and adminVO.money!=0.0">
+                money = #{adminVO.money},
+            </if>
+            <if test="adminVO.roleId!=null">
+                role_id = #{adminVO.roleId}
+            </if>
+        </set>
+        where admin_id = #{adminVO.adminId}
+    </update>
+    <update id="reviewConsultant">
+        update hou_admin set status = 0,role_id = 3
+        where admin_id = #{adminId}
+    </update>
+    <delete id="deleteAdmin">
+        update hou_admin set is_delete = 1
+        where admin_id = #{adminId}
+    </delete>
+    <select id="selectAllAdmin" resultType="com.cykj.enity.vo.AdminVO">
+        select a.*,r.name as roleName from hou_admin a
+        left join hou_role r on r.role_id = a.role_id
+        <where>
+            is_delete = 0
+            <if test="adminDO.account!=null and adminDO.account!= ''">
+                and a.account = #{adminDO.account}
+            </if>
+            <if test="adminDO.name!=null and adminDO.name!= ''">
+                and a.name like concat('%',#{adminDO.name},'%')
+            </if>
+            <if test="adminDO.status!=null and adminDO.status!= ''">
+                and a.status = #{adminDO.status}
+            </if>
+            <if test="adminDO.roleId!=null and adminDO.roleId!= ''">
+                and a.role_id = #{adminDO.roleId}
+            </if>
+        </where>
+    </select>
+    <select id="selectAdminById" resultType="com.cykj.enity.vo.AdminVO">
+        select a.*,r.name  as roleName,c.head_picture from hou_admin a
+        left join hou_role r on r.role_id = a.role_id
+        left join consultant c on c.admin_id = a.admin_id
+        where a.admin_id = #{adminId}
+    </select>
+    <select id="login" resultType="com.cykj.enity.vo.AdminVO">
+        select * from hou_admin
+        where account = #{adminVO.account} and password = #{adminVO.password}
+    </select>
+
+</mapper>
